@@ -8,16 +8,16 @@ export const sidebarNavigation = [
     path: "/admin/dashboard",
     icon: "ri-dashboard-line",
   },
-  {
-    name: "Employee",
-    path: "/admin/admins",
-    icon: "ri-user-settings-line",
-  },
-  {
-    name: "Categories",
-    path: "/admin/category",
-    icon: "ri-folders-line",
-  },
+  // {
+  //   name: "Employee",
+  //   path: "/admin/admins",
+  //   icon: "ri-user-settings-line",
+  // },
+  // {
+  //   name: "Categories",
+  //   path: "/admin/category",
+  //   icon: "ri-folders-line",
+  // },
   {
     name: "Book A Viewing List",
     path: "/admin/bookaviewing",
@@ -45,16 +45,16 @@ icon: "ri-team-line"
   path: "/admin/partners",
   icon: "ri-building-line", // Represents partnership/business
 },
-  {
-    name: "Customers",
-    path: "/admin/customers",
-    icon: "ri-user-line",
-  },
-  {
-    name: "Sellers",
-    path: "/admin/sellers",
-    icon: "ri-store-line",
-  },
+  // {
+  //   name: "Customers",
+  //   path: "/admin/customers",
+  //   icon: "ri-user-line",
+  // },
+  // {
+  //   name: "Sellers",
+  //   path: "/admin/sellers",
+  //   icon: "ri-store-line",
+  // },
   {
     name: "Orders",
     path: "/admin/orders",
