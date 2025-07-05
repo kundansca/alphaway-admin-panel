@@ -1,0 +1,69 @@
+/* Layout Structure */
+.main-layout {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+.layout {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.layout .header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+.layout .content {
+  margin-top: 5px;
+  padding: 0px 15px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding-top: 65px;
+  /* Space for fixed navbar */
+  /* border: 1px solid red; */
+}
+
+.layout .footer {
+  text-align: center;
+  margin-top: auto;
+  padding: 20px;
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  color: #3f4750;
+  font-size: 0.9rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Main Content Area adjustments */
+.main-content-area {
+  flex-grow: 1;
+  transition: margin-left 0.3s ease;
+  margin-left: 225px;
+  margin-right: 0px;
+  overflow-x: hidden;
+  /* border: 1px solid red; */
+}
+
+/* Adjust main content when sidebar is collapsed */
+.main-layout.sidebar-collapsed .main-content-area {
+  margin-left: 85px;
+  /* Margin for collapsed sidebar */
+}

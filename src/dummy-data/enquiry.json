@@ -1,0 +1,107 @@
+[
+  {
+    "firstName": "John",
+    "lastName": "Doe",
+    "phone": "+1 1234567890",
+    "email": "john.doe@example.com",
+    "message": "I'm looking for a studio apartment ideally located close to my workplace. It should be fully furnished, include basic amenities like Wi-Fi, and have good ventilation. I'm planning to move in by the end of this month. Security and cleanliness are a priority, and I’d prefer a place that has minimal noise during the night. It would also be great if the property is pet-friendly as I may adopt a cat soon. Budget is moderately flexible based on the facilities provided."
+  },
+  {
+    "firstName": "Alice",
+    "lastName": "Smith",
+    "phone": "+44 7911123456",
+    "email": "alice.smith@example.co.uk",
+    "message": "I’m relocating for a short-term assignment and require a 2BHK apartment for about 3 months. The location should be easily accessible by public transport and preferably within walking distance to cafes and grocery stores. A furnished apartment with a washing machine and air conditioning is necessary. If available, I'd like to schedule a virtual tour of the property before finalizing anything. Quiet surroundings are important as I work remotely part-time. Immediate availability would be ideal."
+  },
+  {
+    "firstName": "Raj",
+    "lastName": "Kumar",
+    "phone": "+91 9876543210",
+    "email": "raj.kumar@example.in",
+    "message": "I'm a student moving to the city for university and am looking for shared accommodation close to the campus. It should be a safe area, preferably with fellow students or young professionals. Having a shared kitchen and common lounge would be helpful. Access to high-speed internet is a must for my coursework. The room should be adequately furnished, and it’s essential that the property allows a flexible lease agreement as I’m not certain about my duration yet."
+  },
+  {
+    "firstName": "Emma",
+    "lastName": "Watson",
+    "phone": "+1 5559090909",
+    "email": "emma.watson@example.com",
+    "message": "I’m looking for a pet-friendly apartment because I’ll be bringing my dog with me. The building should have green areas nearby or be close to a park. The apartment must be well-ventilated, have a balcony or windows that allow fresh air, and be in a quiet neighborhood. I'd prefer modern interiors, secure entry, and on-site maintenance. A ground floor unit would be a bonus for easy access with my pet. I'm flexible with the move-in date but would prefer to finalize soon."
+  },
+  {
+    "firstName": "Carlos",
+    "lastName": "Martinez",
+    "phone": "+34 612345678",
+    "email": "carlos.m@example.es",
+    "message": "I’m looking for a calm, peaceful neighborhood for long-term living. I work remotely, so a quiet environment with reliable internet is essential. The apartment should be furnished, preferably with a desk or study table and ergonomic chair. It should be close to local stores or markets and have easy access to a pharmacy and hospital in case of emergencies. I’d also appreciate responsive property management and good ventilation. Parking availability would be a great bonus, though not a strict requirement."
+  },
+  {
+    "firstName": "Fatima",
+    "lastName": "Ali",
+    "phone": "+971 501234567",
+    "email": "fatima.ali@example.ae",
+    "message": "I'm planning to move next month and am searching for a 1 or 2-bedroom apartment within a family-friendly neighborhood. It's important that the apartment has a clean and modern kitchen, a spacious living area, and sufficient natural lighting. I’d prefer somewhere not too far from public transportation. A gym or fitness center nearby would be a great addition. Also, I would like to know if the lease can be extended easily in case I decide to stay longer."
+  },
+  {
+    "firstName": "Tom",
+    "lastName": "Holland",
+    "phone": "+1 8001230000",
+    "email": "tom.h@example.com",
+    "message": "I need a rental unit close to major public transportation routes or a metro station as I don’t drive. The apartment should be compact but functional with a small kitchen and laundry access. I’m fine with studio or one-bedroom units. My budget is moderate, and I’d like to avoid extra charges like maintenance or cleaning fees. Fast internet is crucial for my freelance work. Ideally, the building would have good security and basic services like an elevator and waste disposal."
+  },
+  {
+    "firstName": "Chen",
+    "lastName": "Li",
+    "phone": "+86 13512345678",
+    "email": "chen.li@example.cn",
+    "message": "I am moving for a business assignment and need a fully furnished apartment for six months. The unit should include basic kitchen appliances, a comfortable bed, and work desk. Location should be convenient for commuting. I would appreciate weekly or biweekly cleaning service if available. My priority is a peaceful environment with minimal noise, preferably in a building with 24/7 security. Also, access to nearby restaurants, banks, and medical facilities is desirable. Move-in date is flexible within the next three weeks."
+  },
+  {
+    "firstName": "Laura",
+    "lastName": "Brown",
+    "phone": "+61 401234567",
+    "email": "laura.b@example.au",
+    "message": "I’m relocating with my pet dog and need a 1BHK or small 2BHK apartment that allows pets. It should have a balcony or small outdoor area, and it must be close to a park or green zone. I’d also like to know if the apartment comes with a built-in wardrobe and basic furnishings. I work from home, so having a decent-sized workspace or corner that can be converted into an office is important. Quiet surroundings are highly preferable."
+  },
+  {
+    "firstName": "Ahmed",
+    "lastName": "Khan",
+    "phone": "+92 3001234567",
+    "email": "ahmed.khan@example.pk",
+    "message": "I'm looking for an affordable apartment or shared flat as I’m on a tight budget. It should be clean and safe, preferably with all utilities included in the rent. Being close to a bus stop or metro station would be a huge plus. I'm not too concerned with luxury but do require fast Wi-Fi and a comfortable bed. I don’t have pets or vehicles, so parking or pet policy is not an issue. I'm available to move in at short notice."
+  },
+  {
+    "firstName": "Sophie",
+    "lastName": "Turner",
+    "phone": "+1 9998887777",
+    "email": "sophie.t@example.com",
+    "message": "I plan to arrive a few days earlier than the standard move-in date, so I’d like to know if early check-ins are possible. I’m booking from overseas and need clear instructions regarding deposits, lease agreements, and what’s included in the rent. The apartment should come furnished and must have a fully functional kitchen. I’m also interested in knowing about nearby services like grocery stores, laundromats, and restaurants. Ideally, someone should be available to assist me with check-in."
+  },
+  {
+    "firstName": "Liam",
+    "lastName": "Jones",
+    "phone": "+27 823456789",
+    "email": "liam.j@example.za",
+    "message": "I'm relocating for work and looking for a long-term lease of at least one year. I need a modern, well-maintained 1BHK or 2BHK apartment with natural lighting and good ventilation. Proximity to my workplace would be helpful, but access to public transport is also acceptable. I’d prefer a place with in-building laundry and basic appliances. A dedicated parking spot is not essential but would be appreciated. I'm ready to move by the beginning of next month."
+  },
+  {
+    "firstName": "Yuki",
+    "lastName": "Tanaka",
+    "phone": "+81 9012345678",
+    "email": "yuki.t@example.jp",
+    "message": "I’m looking for a compact apartment near a train station to make my daily commute easier. It should be clean, furnished, and include a small kitchen and private bathroom. I’d like to view the unit virtually if possible. As I work late, 24/7 building access and good security are essential. Also, I prefer minimal paperwork and easy lease signing. Quiet surroundings and cleanliness are a must. I’m available for move-in within the next two weeks depending on availability."
+  },
+  {
+    "firstName": "Isabella",
+    "lastName": "Mendez",
+    "phone": "+52 5512345678",
+    "email": "isabella.m@example.mx",
+    "message": "Before moving forward, I need to confirm whether parking is included in the rent or if there’s an additional charge. I own a car and require secure, preferably covered parking. Besides that, the apartment should be semi-furnished with a fridge and stove at minimum. I'm also curious about nearby facilities like gyms and grocery stores. I plan to visit the apartment next weekend and would like to schedule a visit in advance. The lease should be at least 6 months."
+  },
+  {
+    "firstName": "Oliver",
+    "lastName": "Wilson",
+    "phone": "+1 2025550147",
+    "email": "oliver.w@example.com",
+    "message": "I’m planning to move in next week due to a last-minute job relocation. I need a clean, ready-to-move-in apartment with minimal setup requirements. Internet, water, and electricity should already be connected or easy to activate. I’d appreciate an apartment close to the city center, but I’m open to nearby suburbs if the commute isn’t too long. Furnished or semi-furnished options are fine. I’m available for a tour any day this week. Quick lease processing would be greatly appreciated."
+  }
+]
