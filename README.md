@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+# alphaway-admin-panel
+=======
+>>>>>>> 6dac987 (update)
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -11,3 +17,7 @@ Currently, two official plugins are available:
 ami-0e2c8caa4b6378d8c
 Username
 ubuntu
+<<<<<<< HEAD
+=======
+>>>>>>> 07adbde (updated by kundan)
+>>>>>>> 6dac987 (update)
