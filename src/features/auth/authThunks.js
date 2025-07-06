@@ -29,7 +29,7 @@ export const loginAdmin = createAsyncThunk(
         const dataMessage = error.response.data?.message;
 
         if (status === 401) {
-          message = dataMessage || 'Incorrect email or password. Please try again.';
+          message = dataMessage || 'Login failed. Please check your credentials.';
         } else if (status === 403) {
           message = dataMessage || 'You do not have permission to log in.';
         } else if (status === 404) {
@@ -37,7 +37,7 @@ export const loginAdmin = createAsyncThunk(
         } else if (status === 500) {
           message = dataMessage || 'Server error. Please try again later.';
         } else {
-          message = dataMessage || `Login failed with status code ${status}.`;
+          message = dataMessage || `Login failed`;
         }
       } else if (error.request) {
         // Network error or no response from server
