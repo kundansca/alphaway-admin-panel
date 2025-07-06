@@ -3,11 +3,11 @@ export const sidebarNavigation = [
     type: "header",
     text: "Core",
   },
-  {
-    name: "Dashboard",
-    path: "/admin/dashboard",
-    icon: "ri-dashboard-line",
-  },
+  // {
+  //   name: "Dashboard",
+  //   path: "/admin/dashboard",
+  //   icon: "ri-dashboard-line",
+  // },
   // {
   //   name: "Employee",
   //   path: "/admin/admins",
@@ -55,54 +55,54 @@ icon: "ri-team-line"
   //   path: "/admin/sellers",
   //   icon: "ri-store-line",
   // },
-  {
-    name: "Orders",
-    path: "/admin/orders",
-    icon: "ri-shopping-cart-line",
-  },
-  {
-    name: "Settings",
-    icon: "ri-settings-3-line",
-    submenu: [
-      {
-        name: "Pincode",
-        path: "/admin/pincode",
-      },
-      {
-        name: "Products",
-        path: "/admin/product",
-      },
-      {
-        name: "Brands",
-        path: "/admin/brand",
-      },
-      {
-        name: "Offers",
-        path: "/admin/offer",
-      },
-      {
-        name: "Product Attributes",
-        path: "/admin/attribute",
-      },
-    ],
-  },
-  {
-    name: "General",
-    icon: "ri-user-settings-line",
-    submenu: [
-      {
-        name: "Profile",
-        path: "/admin/profile",
-      },
-      // {
-      //     name: "Change Password",
-      //     path: "/admin/changepassword",
-      // },
-      {
-        name: "Logout",
-        path: "/login",
-        icon: "ri-logout-box-line",
-      },
-    ],
-  },
+  // {
+  //   name: "Orders",
+  //   path: "/admin/orders",
+  //   icon: "ri-shopping-cart-line",
+  // },
+  // {
+  //   name: "Settings",
+  //   icon: "ri-settings-3-line",
+  //   submenu: [
+  //     {
+  //       name: "Pincode",
+  //       path: "/admin/pincode",
+  //     },
+  //     {
+  //       name: "Products",
+  //       path: "/admin/product",
+  //     },
+  //     {
+  //       name: "Brands",
+  //       path: "/admin/brand",
+  //     },
+  //     {
+  //       name: "Offers",
+  //       path: "/admin/offer",
+  //     },
+  //     {
+  //       name: "Product Attributes",
+  //       path: "/admin/attribute",
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: "General",
+  //   icon: "ri-user-settings-line",
+  //   submenu: [
+  //     {
+  //       name: "Profile",
+  //       path: "/admin/profile",
+  //     },
+  //     // {
+  //     //     name: "Change Password",
+  //     //     path: "/admin/changepassword",
+  //     // },
+  //     {
+  //       name: "Logout",
+  //       path: "/login",
+  //       icon: "ri-logout-box-line",
+  //     },
+  //   ],
+  // },
 ];
