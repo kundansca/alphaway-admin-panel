@@ -14,38 +14,25 @@ export const loginAdmin = createAsyncThunk(
 
       return response.data
     } catch (error) {
-      let message = 'An unexpected error occurred. Please try again.';
+       const status = error.response.status;
+      const dataMessage = error.response.data?.message;
 
-      // Handle server response errors
-      if (error.response) {
-       console.error(error);
-
-      // Optional: Default message
-      let message = 'An unexpected error occurred. Please try again.';
-
-      // Handle server response errors
-      if (error.response) {
-        const status = error.response.status;
-        const dataMessage = error.response.data?.message;
-
-        if (status === 401) {
-          message = dataMessage || 'Login failed. Please check your credentials.';
-        } else if (status === 403) {
-          message = dataMessage || 'You do not have permission to log in.';
-        } else if (status === 404) {
-          message = dataMessage || 'Login endpoint not found.';
-        } else if (status === 500) {
-          message = dataMessage || 'Server error. Please try again later.';
-        } else {
-          message = dataMessage || `Login failed`;
-        }
-      } else if (error.request) {
-        // Network error or no response from server
-        message = 'Unable to connect to the server. Please check your internet connection.';
-      }
-
-      return thunkAPI.rejectWithValue(message);
-    }
+        console.log(error);
+        if (error?.response?.status === 401) {
+            return thunkAPI.rejectWithValue(
+           error.response?.data?.message || 'Login failed. Please check your credentials.'
+      );
+    } else if (error?.response?.status ===500) {
+     
+     return thunkAPI.rejectWithValue(
+           error.response?.data?.message || 'Oops! Something went wrong.');
+  } else {
+    return thunkAPI.rejectWithValue(
+           error.response?.data?.message || 'Login failed');
   }
+
+
+    
+    }
   }
 );
