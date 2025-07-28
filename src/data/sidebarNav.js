@@ -3,21 +3,6 @@ export const sidebarNavigation = [
     type: "header",
     text: "Core",
   },
-  // {
-  //   name: "Dashboard",
-  //   path: "/admin/dashboard",
-  //   icon: "ri-dashboard-line",
-  // },
-  // {
-  //   name: "Employee",
-  //   path: "/admin/admins",
-  //   icon: "ri-user-settings-line",
-  // },
-  // {
-  //   name: "Categories",
-  //   path: "/admin/category",
-  //   icon: "ri-folders-line",
-  // },
   {
     name: "Book A Viewing List",
     path: "/admin/bookaviewing",

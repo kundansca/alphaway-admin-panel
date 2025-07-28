@@ -33,14 +33,23 @@ const Navbar = ({ toggleSidebar }) => {
         </Link>
       </div>
 
-      <div className="navbar-center">
+      {/* <div className="navbar-center">
         <div className="search-container">
           <input type="text" placeholder="Search..." className="search-input" />
           <button className="search-button" aria-label="Search">
             <i className="ri-search-line"></i>
           </button>
         </div>
-      </div>
+      </div> */}
+
+      {/* <div className="navbar-center">
+        <div className="search-container">
+          <input type="text" placeholder="Search..." className="search-input" />
+          <button className="search-button" aria-label="Search">
+            <i className="ri-search-line"></i>
+          </button>
+        </div>
+      </div> */}
 
       <div className="navbar-right">
         <div className="user-dropdown" ref={dropdownRef}>

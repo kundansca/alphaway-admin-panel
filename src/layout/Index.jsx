@@ -13,11 +13,6 @@ const Layout = ({ children }) => {
     setSidebarCollapsed(prev => !prev);
   };
 
-  useEffect(() => {
-    // On desktop, the sidebar should start as expanded
-    setSidebarCollapsed(true);
-  }, []);
-
   return (
     <div className={`main-layout has-sidebar fixed-sidebar fixed-header ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       <Sidebar collapsed={sidebarCollapsed} toggleSidebar={toggleSidebar} />

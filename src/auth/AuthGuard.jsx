@@ -10,7 +10,7 @@ const AuthGuard = ({ children }) => {
     // return <Navigate to="/login" />;
   }
 
-  return <Outlet />; // If authenticated, render the children (protected route)
+  return <Outlet />;
 };
 
 export default AuthGuard;
