@@ -34,38 +34,6 @@ export const apiRequest = async (endpoint, method, body = null, headers = {}) =>
   }
 };
 
-// export const apiRequestPost = async (endpoint,body) => {
-//   try {
-
-//     console.log("POST API REQUEST DATA",{
-//       url: `${BASE_URL}${endpoint}`,
-//       method:"POST", // <-- dynamic now
-//       headers: {
-//         "Content-Type": "application/json",
-//         "X-Backend-Token": backEndToken,
-//       },
-//       data: body, // Used in POST, PUT etc. Axios ignores `data` in GET requests
-//     })
-//     const response = await axios({
-//       url: `${BASE_URL}${endpoint}`,
-//       method:"POST", // <-- dynamic now
-//       headers: {
-//         "Content-Type": "application/json",
-//         "X-Backend-Token": backEndToken,
-//       },
-//       data: body, // Used in POST, PUT etc. Axios ignores `data` in GET requests
-//     });
-
-//     return response.data;
-//   } catch (error) {
-//     console.error("API request failed:", error.response || error);
-//     throw error.response ? error.response.data : error;
-//   }
-// };
-
-
-
-
 export const apiRequestPost = async (endpoint, body, isMultipart = false) => {
   try {
     const tokens = await getToken(); // or from store/context

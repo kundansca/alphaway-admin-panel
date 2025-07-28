@@ -11,9 +11,6 @@ const Sidebar = ({ collapsed, toggleSidebar }) => {
   const sidebarRef = useRef(null);
   const submenuRef = useRef(null);
 
-
-
-
   const toggleSubmenu = (menuName) => {
     setOpenSubmenu(prev => (prev === menuName ? null : menuName));
   };
