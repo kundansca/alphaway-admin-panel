@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 
 function EnquiryModal({ show, handleClose, booking, mode }) {
+
   const initialForm = {
     firstName: "",
     lastName: "",
@@ -14,6 +15,7 @@ function EnquiryModal({ show, handleClose, booking, mode }) {
 
   useEffect(() => {
     if (mode === "view" && booking) {
+      
       setFormData({ ...initialForm, ...booking });
     } else {
       setFormData(initialForm);

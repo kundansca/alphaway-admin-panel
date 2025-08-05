@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 
 function BookingModal({ show, handleClose, booking, mode }) {
-  console.log(booking);
+
   const initialForm = {
     firstName: "",
     lastName: "",
@@ -36,7 +36,7 @@ const formattedDate = date.toLocaleDateString('en-GB', options);
   };
 
   const handleSubmit = () => {
-    console.log("Submitted:", formData);
+   
     // TODO: Handle API submission here
     handleClose();
   };

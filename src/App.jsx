@@ -24,14 +24,6 @@ const App = () => {
       return state.auth;
     });
  
-  const onIdle = () => {
-    console.log('User is idle');
-    // yahan refresh token API ya logout kar sakte ho
-  };
-
-  const onActive = () => {
-    console.log('User is active again');
-  };
 
   return (
     <StrictMode>

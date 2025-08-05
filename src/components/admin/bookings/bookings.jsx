@@ -21,26 +21,12 @@ function Bookings() {
   const [showModal, setShowModal] = useState(false);
   const [selectedViewer, setSelectedViewer] = useState(null);
    let authData=useSelector((state)=>{
-    console.log(state.auth);
+    
       return state.auth;
 
   })
   const BASEURL = import.meta.env.VITE_APP_BASE_API_URL;
-  // ✅ Fetch bookings from server
-  // useEffect(() => {
-  //   fetchBookings()
-  //     .then((response) => {
-  //       const data = response.data;
-  //       setAllBookings(data);
-  //       setFilteredData(data);
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching bookings:", error);
-  //       setLoading(false);
-  //     });
-  // }, []);
-
+ 
   
   useEffect(() => {
     const fetchBookings = async () => {
@@ -57,7 +43,7 @@ function Bookings() {
         }
       );
   
-        console.log(response.data);
+       
         const data = response.data.content;
         setAllBookings(data);
         setFilteredData(data);

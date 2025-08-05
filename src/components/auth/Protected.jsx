@@ -11,7 +11,7 @@ export default function Protected(props) {
    if(!authData || !authData.userData){
     return <Navigate to="/login" replace />;
    }
-   console.log(authData);
+ 
    const expiresDate = new Date(authData.userData.expiresAt.split('.')[0] + "Z");
    const now = new Date();
    

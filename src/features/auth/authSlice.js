@@ -38,7 +38,7 @@ const authSlice = createSlice({
       })
       .addCase(loginAdmin.fulfilled, (state, action) => {
         state.loading = false;
-        console.log(action.payload);
+    
         state.userData =action.payload;
 
         localStorage.setItem("authData", JSON.stringify(state));

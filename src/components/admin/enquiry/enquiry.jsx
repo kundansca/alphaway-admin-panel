@@ -96,6 +96,7 @@ function EnquiryList() {
           Authorization: `Bearer ${authData.userData.accessToken}`,
         },
       });
+     
       const serverData = response.data.content || [];
       setFilteredData(serverData);
       setOriginalData(serverData);

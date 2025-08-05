@@ -57,7 +57,7 @@ function Dashboard() {
   const fetchData = async () => {
     try {
       const response = await apiRequestGet(`/dashboard`);
-      console.log(response);
+      
 
       // Check if response exists and has data
       if (response && response.data) {
