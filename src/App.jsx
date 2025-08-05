@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Use Routes and Route for routing
-import Login from './pages/Login'; // Assuming Login is in the 'pages' folder
+import Login from './pages/login/Login'; // Assuming Login is in the 'pages' folder
 import Dashboard from './components/admin/dashboard/Dashboard'; // Import the Dashboard component
 import AuthGuard from './auth/AuthGuard';  // Import the AuthGuard component
 
@@ -11,12 +11,11 @@ import Enquiry from './components/admin/enquiry/enquiry';
 import StudentList from './components/admin/studentList/studentList';
 import PartnerList from './components/admin/partners/partnersList';
 import BookAViewing from './components/admin/bookaviewing/BookAviewing';
-import { useIdleTimer } from 'react-idle-timer';
-import ActivityTrackerdemo from './pages/ActivityTrackerdemo';
-import ActivityTracker from './pages/ActivityTracker';
+
+import ActivityTracker from './components/auth/ActivityTracker';
 import { useSelector } from 'react-redux';
-import Protected from './pages/Protected';
-import LoginProtected from './pages/LoginProtected';
+import Protected from './components/auth/Protected';
+import LoginProtected from "./components/auth/LoginProtected"
 
 const App = () => {
   let {userData}=useSelector((state)=>

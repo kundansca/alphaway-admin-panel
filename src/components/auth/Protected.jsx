@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector,useDispatch } from 'react-redux';
 import { Navigate } from "react-router-dom";
-import { logout } from '../features/auth/authSlice';
+import { logout } from '../../features/auth/authSlice';
 export default function Protected(props) {
     const dispatch=useDispatch();
     const authData=useSelector((state)=>{

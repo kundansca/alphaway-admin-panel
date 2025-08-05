@@ -2,7 +2,7 @@ import { useIdleTimer } from 'react-idle-timer';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import axios from 'axios';
-import { logout, updateToken } from '../features/auth/authSlice';
+import { logout, updateToken } from '../../features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 
 const ActivityTracker = () => {
