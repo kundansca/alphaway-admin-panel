@@ -93,7 +93,7 @@ function EnquiryList() {
     try {
       let response = await axios.get(`${BASEURL}/enquiry`, {
         headers: {
-          Authorization: `Bearer ${authData.token}`,
+          Authorization: `Bearer ${authData.userData.accessToken}`,
         },
       });
       const serverData = response.data.content || [];

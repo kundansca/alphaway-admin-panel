@@ -86,7 +86,7 @@ function PartnerList() {
     try {
       const response = await axios.get(`${BASEURL}/partner/student-info`, {
         headers: {
-          Authorization: `Bearer ${authData.token}`,
+          Authorization: `Bearer ${authData.userData.accessToken}`,
         },
       });
       const serverData = response.data.content || [];

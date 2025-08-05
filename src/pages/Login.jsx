@@ -38,8 +38,17 @@ const Login = () => {
 
     // Client-side validation
     const errors = {};
-    if (!username.trim()) errors.username = 'Username is required';
-    if (!password.trim()) errors.password = 'Password is required';
+      if (!username.trim()) {
+    errors.username = 'Email is required';
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(username)) {
+    errors.username = 'Invalid email address';
+  }
+      if (!password.trim()) {
+      errors.password = 'Password is required';
+    } else if (password.length < 6) {
+      errors.password = 'Password must be at least 6 characters';
+    }
+
     if (Object.keys(errors).length) return setFieldErrors(errors);
 
     try {

@@ -11,8 +11,28 @@ import Enquiry from './components/admin/enquiry/enquiry';
 import StudentList from './components/admin/studentList/studentList';
 import PartnerList from './components/admin/partners/partnersList';
 import BookAViewing from './components/admin/bookaviewing/BookAviewing';
+import { useIdleTimer } from 'react-idle-timer';
+import ActivityTrackerdemo from './pages/ActivityTrackerdemo';
+import ActivityTracker from './pages/ActivityTracker';
+import { useSelector } from 'react-redux';
+import Protected from './pages/Protected';
+import LoginProtected from './pages/LoginProtected';
 
 const App = () => {
+  let {userData}=useSelector((state)=>
+    {
+     
+      return state.auth;
+    });
+ 
+  const onIdle = () => {
+    console.log('User is idle');
+    // yahan refresh token API ya logout kar sakte ho
+  };
+
+  const onActive = () => {
+    console.log('User is active again');
+  };
 
   return (
     <StrictMode>
@@ -21,24 +41,88 @@ const App = () => {
         {/* <Toast /> */}
 
 
-        <Routes>
+   
           {/* Define routes for both / and /login */}
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route element={<AuthGuard />}>
-            <Route path="/admin/dashboard" element={<Dashboard />} />
-            <Route path="/admin/logout" element={<Logout />} />
-            <Route path="/admin/bookaviewing" element={<BookAViewing />} />
-            <Route path="/admin/bookings" element={<Bookings />} />
-            <Route path="/admin/enquiry" element={<Enquiry />} />
-            <Route path="/admin/students" element={<StudentList />} />
-            <Route path="/admin/partners" element={<PartnerList />} />
-          </Route>
+          
+         <Routes>
+          {/* Public Route */}
+          <Route path="/login" element={<LoginProtected><Login /></LoginProtected>} />
 
+          {/* Protected Routes */}
+          <Route
+            path="/"
+            element={
+              <Protected>
+                <BookAViewing />
+              </Protected>
+            }
+          />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <Protected>
+                <Dashboard />
+              </Protected>
+            }
+          />
+          <Route
+            path="/admin/logout"
+            element={
+              <Protected>
+                <Logout />
+              </Protected>
+            }
+          />
+          <Route
+            path="/admin/bookaviewing"
+            element={
+              <Protected>
+                <BookAViewing />
+              </Protected>
+            }
+          />
+          <Route
+            path="/admin/bookings"
+            element={
+              <Protected>
+                <Bookings />
+              </Protected>
+            }
+          />
+          <Route
+            path="/admin/enquiry"
+            element={
+              <Protected>
+                <Enquiry />
+              </Protected>
+            }
+          />
+          <Route
+            path="/admin/students"
+            element={
+              <Protected>
+                <StudentList />
+              </Protected>
+            }
+          />
+          <Route
+            path="/admin/partners"
+            element={
+              <Protected>
+                <PartnerList />
+              </Protected>
+            }
+          />
+
+          {/* 404 */}
           <Route path="*" element={<NotFound />} />
-
         </Routes>
+
+        {/* Track activity if user is logged in */}
+        {userData && <ActivityTracker />}
+      
       </BrowserRouter>
+    
     </StrictMode>
   );
 };

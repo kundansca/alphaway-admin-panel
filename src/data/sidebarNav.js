@@ -18,13 +18,11 @@ export const sidebarNavigation = [
     path: "/admin/enquiry",
     icon: "ri-questionnaire-line",
   },
-  {
-    name: "Students List",
-    path: "/admin/students",
-icon: "ri-team-line"
-
-
-  },
+  // {
+  //   name: "Students List",
+  //   path: "/admin/students",
+  //   icon: "ri-team-line"
+  // },
   {
   name: "Partner List",
   path: "/admin/partners",

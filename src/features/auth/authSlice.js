@@ -12,7 +12,24 @@ const initialState = localData
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+   reducers: {
+      logout: (state) => {
+     state.loading = false;
+      state.token = null;
+      state.error = null;
+      state.userData = null;
+      localStorage.removeItem("authData");
+    },
+     updateToken: (state, action) => {
+      const { accessToken, expiresAt } = action.payload;
+      if (state.userData) {
+        state.userData.accessToken = accessToken;
+        state.userData.expiresAt = expiresAt;
+
+        localStorage.setItem("authData", JSON.stringify(state));
+      }
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loginAdmin.pending, (state) => {
@@ -21,14 +38,15 @@ const authSlice = createSlice({
       })
       .addCase(loginAdmin.fulfilled, (state, action) => {
         state.loading = false;
-        state.token =action.payload;
+        console.log(action.payload);
+        state.userData =action.payload;
 
         localStorage.setItem("authData", JSON.stringify(state));
       })
       .addCase(loginAdmin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        state.token=null;
+        state.userData=null;
 
         localStorage.setItem("authData", JSON.stringify(state));
       });
@@ -36,3 +54,4 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
+export const { logout,updateToken } = authSlice.actions;

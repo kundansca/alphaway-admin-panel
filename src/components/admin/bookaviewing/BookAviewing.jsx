@@ -29,7 +29,7 @@ function BookAViewing() {
     try {
       const response = await axios.get(`${BASEURL}/book/viewing`, {
         headers: {
-          Authorization: `Bearer ${authData.token}`,
+          Authorization: `Bearer ${authData.userData.accessToken}`,
         },
       });
     

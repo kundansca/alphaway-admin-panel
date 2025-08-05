@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 
 function BookingModal({ show, handleClose, booking, mode }) {
+  console.log(booking);
   const initialForm = {
     firstName: "",
     lastName: "",
@@ -18,7 +19,12 @@ function BookingModal({ show, handleClose, booking, mode }) {
 
   useEffect(() => {
     if (mode === "view" && booking) {
-      setFormData({ ...initialForm, ...booking });
+      const dateOfBirth = "2010-08-03";
+     const date = new Date(booking?.dateOfBirth);
+
+ const options = { day: '2-digit', month: 'long', year: 'numeric' };
+const formattedDate = date.toLocaleDateString('en-GB', options);
+      setFormData({ ...initialForm, ...booking,university:booking?.university?.name,gender:booking?.gender?.name,dob:formattedDate});
     } else {
       setFormData(initialForm);
     }
@@ -39,7 +45,7 @@ function BookingModal({ show, handleClose, booking, mode }) {
     <Modal show={show} onHide={handleClose} size="lg" centered>
       <Modal.Header closeButton className="bg-primary text-white">
         <Modal.Title>
-          {mode === "add" ? "Add New Booking" : `Booking Details #${booking?.id}`}
+          {mode === "add" ? "Add New Booking" : `Booking Details`}
         </Modal.Title>
       </Modal.Header>
 
@@ -107,7 +113,7 @@ function BookingModal({ show, handleClose, booking, mode }) {
               <Form.Group>
                 <Form.Label>Date of Birth</Form.Label>
                 <Form.Control
-                  type="date"
+                  type={mode === "view" && booking? "text":"date"}
                   name="dob"
                   value={formData.dob}
                   onChange={handleChange}
