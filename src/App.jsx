@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux';
 import Protected from './components/auth/Protected';
 import LoginProtected from "./components/auth/LoginProtected"
 import EmailSender from './components/admin/email/EmailSender';
+import RegisterForm from './components/admin/RegisterForm/RegisterForm';
 
 
 
@@ -89,6 +90,15 @@ const App = () => {
             element={
               <Protected>
                 <Enquiry />
+              </Protected>
+            }
+          />
+
+           <Route
+            path="/add-user"
+            element={
+              <Protected>
+                <RegisterForm />
               </Protected>
             }
           />

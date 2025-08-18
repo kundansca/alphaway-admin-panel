@@ -28,6 +28,16 @@ export const sidebarNavigation = [
   path: "/admin/partners",
   icon: "ri-building-line", // Represents partnership/business
 },
+ {
+  name: "Email Sender",
+  path: "/email",
+  icon: "ri-mail-send-line menu-icon", // Represents partnership/business
+},
+{
+  name: "Add User",
+  path: "/add-user",
+  icon: "ri-user-add-line", // Represents partnership/business
+},
   // {
   //   name: "Customers",
   //   path: "/admin/customers",

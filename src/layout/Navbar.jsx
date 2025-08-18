@@ -5,6 +5,7 @@ import { userDropdownItems } from '../data/navbarDropdown';
 import {useDispatch} from "react-redux";
 import { logout } from "../features/auth/authSlice";
 
+
 const Navbar = ({ toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   
@@ -82,9 +83,12 @@ const Navbar = ({ toggleSidebar }) => {
                 <i className={item.icon}></i> {item.name}
               </Link>
             ))}
+          
           </div>
         </div>
+    
       </div>
+      
     </header>
   );
 };
