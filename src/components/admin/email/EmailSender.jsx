@@ -86,11 +86,33 @@ const EmailSender = () => {
           <div className="mb-3">
             <label className="form-label">Message</label>
             <ReactQuill
-              theme="snow"
-              value={message}
-              onChange={setMessage}
-              style={{ minHeight: "150px" }}
-            />
+                theme="snow"
+                value={message}
+                onChange={setMessage}
+                style={{ minHeight: "150px" }}
+                modules={{
+                toolbar: [
+                    [{ header: [1, 2, 3, false] }],
+                    ["bold", "italic", "underline", "strike"],
+                    [{ align: [] }], // 👈 yeh alignment ke liye
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    ["link"],
+                    ["clean"],
+                ],
+                }}
+                formats={[
+                "header",
+                "bold",
+                "italic",
+                "underline",
+                "strike",
+                "align",
+                "list",
+                "bullet",
+                "link",
+                
+                ]}
+           />
           </div>
 
           {/* Buttons */}
@@ -139,7 +161,15 @@ const EmailSender = () => {
               <p>
                 <strong>Message:</strong>
               </p>
-              <div dangerouslySetInnerHTML={{ __html: message }} />
+              <div dangerouslySetInnerHTML={{ __html: message }}  style={{
+                maxHeight: "250px", 
+                overflowY: "auto",
+                border: "1px solid #ddd",
+                padding: "10px",
+                borderRadius: "8px",
+                background: "#fff",
+            }}
+          />
 
               <p>
                 <strong>Recipients:</strong>
