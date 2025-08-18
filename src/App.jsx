@@ -11,11 +11,13 @@ import Enquiry from './components/admin/enquiry/enquiry';
 import StudentList from './components/admin/studentList/studentList';
 import PartnerList from './components/admin/partners/partnersList';
 import BookAViewing from './components/admin/bookaviewing/BookAviewing';
-
 import ActivityTracker from './components/auth/ActivityTracker';
 import { useSelector } from 'react-redux';
 import Protected from './components/auth/Protected';
 import LoginProtected from "./components/auth/LoginProtected"
+import EmailSender from './components/admin/email/EmailSender';
+
+
 
 const App = () => {
   let {userData}=useSelector((state)=>
@@ -56,6 +58,8 @@ const App = () => {
               </Protected>
             }
           />
+          
+         
           <Route
             path="/admin/logout"
             element={
@@ -85,6 +89,14 @@ const App = () => {
             element={
               <Protected>
                 <Enquiry />
+              </Protected>
+            }
+          />
+             <Route
+            path="/email"
+            element={
+              <Protected>
+                <EmailSender />
               </Protected>
             }
           />
