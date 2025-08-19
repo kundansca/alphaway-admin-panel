@@ -12,7 +12,11 @@ const EmailSender = () => {
   const [message, setMessage] = useState("");
   const [preview, setPreview] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [showAllRecipients, setShowAllRecipients] = useState(false); // NEW state
+  const [showAllRecipients, setShowAllRecipients] = useState(false);
+  const [testEmail, setTestEmail] = useState("");
+  const [testLoading, setTestLoading] = useState(false);
+  const [testPassed, setTestPassed] = useState(false);
+  const [showTestModal, setShowTestModal] = useState(false);
 
   // CSV File Upload handler
   const handleFileUpload = (e) => {
@@ -28,7 +32,7 @@ const EmailSender = () => {
     }
   };
 
-  // Send button click
+  // Send Bulk Email
   const handleSend = async () => {
     if (!csvData.length) {
       alert("Please upload a CSV file with emails first!");
@@ -52,6 +56,36 @@ const EmailSender = () => {
       alert("Server error!");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // ✅ Send Test Email
+  const handleTestEmail = async () => {
+    setTestLoading(true);
+    try {
+      const payload = { subject, message, recipient: testEmail };
+
+      const res = await axios.post(
+        "http://localhost:5000/send-test-email",
+        payload,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (res.status === 200) {
+        alert("Test email sent successfully!");
+        setTestPassed(true);
+        setShowTestModal(false);
+        setTestEmail("");
+      } else {
+        alert("Error sending test email!");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Server error!");
+    } finally {
+      setTestLoading(false);
     }
   };
 
@@ -87,21 +121,21 @@ const EmailSender = () => {
           <div className="mb-3">
             <label className="form-label">Message</label>
             <ReactQuill
-                theme="snow"
-                value={message}
-                onChange={setMessage}
-                style={{ minHeight: "150px",}}
-                modules={{
+              theme="snow"
+              value={message}
+              onChange={setMessage}
+              style={{ minHeight: "150px" }}
+              modules={{
                 toolbar: [
-                    [{ header: [1, 2, 3, false] }],
-                    ["bold", "italic", "underline", "strike"],
-                    [{ align: [] }], // 👈 yeh alignment ke liye
-                    [{ list: "ordered" }, { list: "bullet" }],
-                    ["link"],
-                    ["clean"],
+                  [{ header: [1, 2, 3, false] }],
+                  ["bold", "italic", "underline", "strike"],
+                  [{ align: [] }],
+                  [{ list: "ordered" }, { list: "bullet" }],
+                  ["link"],
+                  ["clean"],
                 ],
-                }}
-                formats={[
+              }}
+              formats={[
                 "header",
                 "bold",
                 "italic",
@@ -111,9 +145,8 @@ const EmailSender = () => {
                 "list",
                 "bullet",
                 "link",
-                
-                ]}
-           />
+              ]}
+            />
           </div>
 
           {/* Buttons */}
@@ -126,6 +159,20 @@ const EmailSender = () => {
               {preview ? "Hide Preview" : "Preview"}
             </button>
 
+            {/* Open Modal for Test Email */}
+            <button
+              className="btn btn-warning"
+              onClick={() => setShowTestModal(true)}
+             disabled={
+            !csvData.length || 
+            !subject.trim() || 
+            !message.trim() || 
+            !preview
+          }
+            >
+              Send Test Email
+            </button>
+
             <button
               className="btn btn-primary"
               onClick={handleSend}
@@ -134,7 +181,8 @@ const EmailSender = () => {
                 !csvData.length ||
                 !subject.trim() ||
                 !message.trim() ||
-                !preview
+                !preview||
+                !testPassed
               }
             >
               {loading ? (
@@ -152,6 +200,59 @@ const EmailSender = () => {
             </button>
           </div>
 
+          {/* ✅ Modal for Test Email */}
+          {showTestModal && (
+            <>
+              <div className="modal d-block" tabIndex="-1" role="dialog">
+                <div
+                  className="modal-dialog modal-dialog-centered"
+                  role="document"
+                >
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="modal-title">Send Test Email</h5>
+                      <button
+                        type="button"
+                        className="btn-close"
+                        onClick={() => setShowTestModal(false)}
+                      ></button>
+                    </div>
+                    <div className="modal-body">
+                      <input
+                        type="email"
+                        className="form-control"
+                        placeholder="Enter test email address"
+                        value={testEmail}
+                        onChange={(e) => setTestEmail(e.target.value)}
+                      />
+                    </div>
+                    <div className="modal-footer">
+                      <button
+                        className="btn btn-secondary"
+                        onClick={() => setShowTestModal(false)}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="btn btn-warning"
+                        onClick={handleTestEmail}
+                        disabled={testLoading || !testEmail.trim()}
+                      >
+                        {testLoading ? "Sending..." : "Send Test Email"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* ✅ Backdrop */}
+              <div
+                className="modal-backdrop fade show"
+                onClick={() => setShowTestModal(false)}
+              ></div>
+            </>
+          )}
+
           {/* Preview Section */}
           {preview && (
             <div className="mt-4 border p-3 rounded bg-light">
@@ -162,15 +263,17 @@ const EmailSender = () => {
               <p>
                 <strong>Message:</strong>
               </p>
-              <div dangerouslySetInnerHTML={{ __html: message }}  style={{
-                maxHeight: "250px", 
-                overflowY: "auto",
-                border: "1px solid #ddd",
-                padding: "10px",
-                borderRadius: "8px",
-                background: "#fff",
-            }}
-          />
+              <div
+                dangerouslySetInnerHTML={{ __html: message }}
+                style={{
+                  maxHeight: "250px",
+                  overflowY: "auto",
+                  border: "1px solid #ddd",
+                  padding: "10px",
+                  borderRadius: "8px",
+                  background: "#fff",
+                }}
+              />
 
               <p>
                 <strong>Recipients:</strong>
