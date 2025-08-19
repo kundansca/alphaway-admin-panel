@@ -17,6 +17,13 @@ const EmailSender = () => {
   const [testLoading, setTestLoading] = useState(false);
   const [testPassed, setTestPassed] = useState(false);
   const [showTestModal, setShowTestModal] = useState(false);
+  const [testError, setTestError] = useState("");
+
+  // ✅ Email validation function
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
 
   // CSV File Upload handler
   const handleFileUpload = (e) => {
@@ -61,6 +68,11 @@ const EmailSender = () => {
 
   // ✅ Send Test Email
   const handleTestEmail = async () => {
+    if (!validateEmail(testEmail)) {
+      setTestError("Please enter a valid email address!");
+      return;
+    }
+    setTestError(""); // clear error if valid
     setTestLoading(true);
     try {
       const payload = { subject, message, recipient: testEmail };
@@ -163,12 +175,9 @@ const EmailSender = () => {
             <button
               className="btn btn-warning"
               onClick={() => setShowTestModal(true)}
-             disabled={
-            !csvData.length || 
-            !subject.trim() || 
-            !message.trim() || 
-            !preview
-          }
+              disabled={
+                !csvData.length || !subject.trim() || !message.trim() || !preview
+              }
             >
               Send Test Email
             </button>
@@ -181,7 +190,7 @@ const EmailSender = () => {
                 !csvData.length ||
                 !subject.trim() ||
                 !message.trim() ||
-                !preview||
+                !preview ||
                 !testPassed
               }
             >
@@ -220,11 +229,17 @@ const EmailSender = () => {
                     <div className="modal-body">
                       <input
                         type="email"
-                        className="form-control"
+                        className={`form-control ${testError ? "is-invalid" : ""}`}
                         placeholder="Enter test email address"
                         value={testEmail}
-                        onChange={(e) => setTestEmail(e.target.value)}
+                        onChange={(e) => {
+                          setTestEmail(e.target.value);
+                          if (testError) setTestError("");
+                        }}
                       />
+                      {testError && (
+                        <div className="invalid-feedback">{testError}</div>
+                      )}
                     </div>
                     <div className="modal-footer">
                       <button
