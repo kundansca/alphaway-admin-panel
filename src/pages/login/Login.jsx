@@ -16,6 +16,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState({});
+  const [showPassword,setShowPassword]=useState(false);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -114,6 +115,7 @@ const Login = () => {
                           <label className="label">Password</label>
                         </div>
                         <div className="input-field">
+                      
                           <input
                             className="input input--active"
                             type="password"
@@ -121,12 +123,18 @@ const Login = () => {
                             placeholder="Enter Password"
                             value={formData.password}
                             onChange={handleChange}
+                              style={{ paddingRight: "40px" }}
                             
                           />
+                     
+                         
+                 
                           {fieldErrors.password && (
                           <div className="field-error text-danger">{fieldErrors.password}</div>
                         )}
+                          
                         </div>
+
                       </div>
                     </div>
 

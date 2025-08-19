@@ -323,19 +323,7 @@ function AllRegisterUser() {
                     </Form.Select>
                   </Form.Group>
                 </div>
-                <div className="col-md-6">
-                  <Form.Group>
-                    <Form.Label>Status</Form.Label>
-                    <Form.Select
-                      name="status"
-                      value={editForm.status}
-                      onChange={handleEditChange}
-                    >
-                      <option value="Active">Active</option>
-                      <option value="Inactive">Inactive</option>
-                    </Form.Select>
-                  </Form.Group>
-                </div>
+               
                 <div className="col-md-6">
                   <Form.Group>
                     <Form.Label>Password</Form.Label>
@@ -358,6 +346,20 @@ function AllRegisterUser() {
                       onChange={handleEditChange}
                       placeholder="Leave blank if no change"
                     />
+                  </Form.Group>
+
+                </div>
+                 <div className="col-md-6">
+                  <Form.Group>
+                    <Form.Label>Status</Form.Label>
+                    <Form.Select
+                      name="status"
+                      value={editForm.status}
+                      onChange={handleEditChange}
+                    >
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </Form.Select>
                   </Form.Group>
                 </div>
               </div>
