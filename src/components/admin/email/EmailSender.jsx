@@ -6,6 +6,7 @@ import Layout from "../../../layout/Index";
 import axios from "axios";
 import "./EmailSender.css";
 
+
 const EmailSender = () => {
   const [csvData, setCsvData] = useState([]);
   const [subject, setSubject] = useState("");
@@ -19,13 +20,13 @@ const EmailSender = () => {
   const [showTestModal, setShowTestModal] = useState(false);
   const [testError, setTestError] = useState("");
 
-  // ✅ Email validation function
+  // ✅ Email validation
   const validateEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
   };
 
-  // CSV File Upload handler
+  // CSV File Upload
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -48,7 +49,6 @@ const EmailSender = () => {
     setLoading(true);
     try {
       const payload = { subject, message, recipients: csvData };
-
       const res = await axios.post("http://localhost:5000/send-email", payload, {
         headers: { "Content-Type": "application/json" },
       });
@@ -66,13 +66,13 @@ const EmailSender = () => {
     }
   };
 
-  // ✅ Send Test Email
+  // Send Test Email
   const handleTestEmail = async () => {
     if (!validateEmail(testEmail)) {
       setTestError("Please enter a valid email address!");
       return;
     }
-    setTestError(""); // clear error if valid
+    setTestError("");
     setTestLoading(true);
     try {
       const payload = { subject, message, recipient: testEmail };
@@ -129,7 +129,7 @@ const EmailSender = () => {
             />
           </div>
 
-          {/* Rich Text Editor for Message */}
+          {/* Rich Text Editor with font size & color */}
           <div className="mb-3">
             <label className="form-label">Message</label>
             <ReactQuill
@@ -140,6 +140,8 @@ const EmailSender = () => {
               modules={{
                 toolbar: [
                   [{ header: [1, 2, 3, false] }],
+                
+                  [{ color:[] }, { background:[] }], // ✅ text & bg color
                   ["bold", "italic", "underline", "strike"],
                   [{ align: [] }],
                   [{ list: "ordered" }, { list: "bullet" }],
@@ -149,6 +151,8 @@ const EmailSender = () => {
               }}
               formats={[
                 "header",
+                "color",
+                "background",
                 "bold",
                 "italic",
                 "underline",
@@ -171,7 +175,7 @@ const EmailSender = () => {
               {preview ? "Hide Preview" : "Preview"}
             </button>
 
-            {/* Open Modal for Test Email */}
+            {/* Test Email Modal */}
             <button
               className="btn btn-warning"
               onClick={() => setShowTestModal(true)}
@@ -209,7 +213,7 @@ const EmailSender = () => {
             </button>
           </div>
 
-          {/* ✅ Modal for Test Email */}
+          {/* Modal for Test Email */}
           {showTestModal && (
             <>
               <div className="modal d-block" tabIndex="-1" role="dialog">
@@ -260,7 +264,7 @@ const EmailSender = () => {
                 </div>
               </div>
 
-              {/* ✅ Backdrop */}
+              {/* Backdrop */}
               <div
                 className="modal-backdrop fade show"
                 onClick={() => setShowTestModal(false)}

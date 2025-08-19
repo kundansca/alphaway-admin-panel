@@ -64,6 +64,7 @@ const RegisterForm = () => {
     try {
       setLoading(true);
       setMessage("");
+      
 
       // 👉 Replace with your backend API
       const response = await axios.post(
