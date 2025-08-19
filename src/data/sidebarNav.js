@@ -38,6 +38,11 @@ export const sidebarNavigation = [
   path: "/add-user",
   icon: "ri-user-add-line", // Represents partnership/business
 },
+{
+  name: "Registered Users",
+  path: "/registered-users",
+  icon: "ri-group-line", // Represents partnership/business
+},
   // {
   //   name: "Customers",
   //   path: "/admin/customers",

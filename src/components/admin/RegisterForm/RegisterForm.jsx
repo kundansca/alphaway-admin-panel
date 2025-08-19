@@ -6,6 +6,7 @@ const RegisterForm = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    email: "",
     role: "",
     password: "",
     confirmPassword: "",
@@ -26,21 +27,28 @@ const RegisterForm = () => {
   const validateForm = () => {
     let newErrors = {};
 
-        if (!formData.firstName.trim()) newErrors.firstName = "First name is required.";
-        if (!formData.lastName.trim()) newErrors.lastName = "Last name is required.";
-        if (!formData.role) newErrors.role = "Please select a role.";
+    if (!formData.firstName.trim()) newErrors.firstName = "First name is required.";
+    if (!formData.lastName.trim()) newErrors.lastName = "Last name is required.";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email is invalid.";
+    }
 
-        if (!formData.password) {
-            newErrors.password = "Password is required.";
-        } else if (formData.password.length < 6) {
-            newErrors.password = "Password must be at least 6 characters.";
-        }
+    if (!formData.role) newErrors.role = "Please select a role.";
 
-        if (!formData.confirmPassword) {
-            newErrors.confirmPassword = "Confirm password is required.";
-        } else if (formData.password !== formData.confirmPassword) {
-            newErrors.confirmPassword = "Passwords do not match.";
-        }
+    if (!formData.password) {
+      newErrors.password = "Password is required.";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters.";
+    }
+
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Confirm password is required.";
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match.";
+    }
+
     return newErrors;
   };
 
@@ -68,6 +76,7 @@ const RegisterForm = () => {
       setFormData({
         firstName: "",
         lastName: "",
+        email: "",
         role: "",
         password: "",
         confirmPassword: "",
@@ -87,9 +96,7 @@ const RegisterForm = () => {
         <div className="row justify-content-center">
           <div className="col-md-6">
             <div className="card shadow-lg p-4 rounded-4 border-0">
-              <h3 className="text-center mb-4 fw-bold">
-                Add User
-              </h3>
+              <h3 className="text-center mb-4 fw-bold">Add User</h3>
 
               {/* Status message */}
               {message && (
@@ -135,6 +142,22 @@ const RegisterForm = () => {
                   )}
                 </div>
 
+                {/* Email */}
+                <div className="mb-3">
+                  <label className="form-label">Email</label>
+                  <input
+                    type="email"
+                    className="form-control shadow-sm"
+                    placeholder="Enter your email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                  {errors.email && (
+                    <small className="text-danger">{errors.email}</small>
+                  )}
+                </div>
+
                 {/* Role */}
                 <div className="mb-3">
                   <label className="form-label">Role</label>
@@ -157,7 +180,6 @@ const RegisterForm = () => {
                 {/* Password */}
                 <div className="mb-3">
                   <label className="form-label">Password</label>
-                  
                   <input
                     type="password"
                     className="form-control shadow-sm"
@@ -166,7 +188,6 @@ const RegisterForm = () => {
                     value={formData.password}
                     onChange={handleChange}
                   />
-                 
                   {errors.password && (
                     <small className="text-danger">{errors.password}</small>
                   )}
@@ -184,9 +205,7 @@ const RegisterForm = () => {
                     onChange={handleChange}
                   />
                   {errors.confirmPassword && (
-                    <small className="text-danger">
-                      {errors.confirmPassword}
-                    </small>
+                    <small className="text-danger">{errors.confirmPassword}</small>
                   )}
                 </div>
 

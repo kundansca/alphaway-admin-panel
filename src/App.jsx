@@ -17,6 +17,7 @@ import Protected from './components/auth/Protected';
 import LoginProtected from "./components/auth/LoginProtected"
 import EmailSender from './components/admin/email/EmailSender';
 import RegisterForm from './components/admin/RegisterForm/RegisterForm';
+import AllRegisterUser from './components/admin/RegisterForm/AllRegisterUser';
 
 
 
@@ -99,6 +100,14 @@ const App = () => {
             element={
               <Protected>
                 <RegisterForm />
+              </Protected>
+            }
+          />
+           <Route
+            path="/registered-users"
+            element={
+              <Protected>
+                <AllRegisterUser />
               </Protected>
             }
           />

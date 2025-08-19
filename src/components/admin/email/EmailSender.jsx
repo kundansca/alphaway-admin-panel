@@ -4,6 +4,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Layout from "../../../layout/Index";
 import axios from "axios";
+import "./EmailSender.css";
 
 const EmailSender = () => {
   const [csvData, setCsvData] = useState([]);
@@ -89,7 +90,7 @@ const EmailSender = () => {
                 theme="snow"
                 value={message}
                 onChange={setMessage}
-                style={{ minHeight: "150px" }}
+                style={{ minHeight: "150px",}}
                 modules={{
                 toolbar: [
                     [{ header: [1, 2, 3, false] }],
