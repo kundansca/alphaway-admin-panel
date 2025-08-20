@@ -22,6 +22,9 @@ const EmailSender = () => {
   const [testPassed, setTestPassed] = useState(false);
   const [showTestModal, setShowTestModal] = useState(false);
   const [testError, setTestError] = useState("");
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+  const [redirectUrl, setRedirectUrl] = useState("");
   const quillRef = useRef(null);
 
   // Email validation
@@ -39,14 +42,23 @@ const EmailSender = () => {
     }
   };
 
-  // Custom Image URL insert
-  const insertImageUrl = () => {
-    const url = prompt("Enter image URL");
-    if (url) {
-      const quill = quillRef.current.getEditor();
-      const range = quill.getSelection();
-      quill.insertEmbed(range?.index || 0, "image", url, "user");
+  // Insert Image from Modal
+  const handleInsertImage = () => {
+    if (!imageUrl.trim()) return;
+    const quill = quillRef.current.getEditor();
+    const range = quill.getSelection(true);
+
+    if (redirectUrl.trim()) {
+      quill.clipboard.dangerouslyPasteHTML(
+        range.index,
+        `<a href="${redirectUrl}" target="_blank"><img src="${imageUrl}" alt="image" /></a>`
+      );
+    } else {
+      quill.insertEmbed(range.index, "image", imageUrl, "user");
     }
+    setShowImageModal(false);
+    setImageUrl("");
+    setRedirectUrl("");
   };
 
   // Send Bulk Email
@@ -55,7 +67,7 @@ const EmailSender = () => {
     setLoading(true);
     try {
       const payload = { subject, message, recipients: csvData };
-      console.log("payload",payload);
+      console.log("payload", JSON.stringify(payload));
       const res = await axios.post("http://localhost:5000/send-email", payload, {
         headers: { "Content-Type": "application/json" },
       });
@@ -79,6 +91,7 @@ const EmailSender = () => {
     setTestLoading(true);
     try {
       const payload = { subject, message, recipient: testEmail };
+      console.log("test email payload", JSON.stringify(payload));
       const res = await axios.post("http://localhost:5000/send-test-email", payload, {
         headers: { "Content-Type": "application/json" },
       });
@@ -127,58 +140,57 @@ const EmailSender = () => {
           {/* Message Editor */}
           <div className="mb-3">
             <label className="form-label">Message</label>
-            {/* Button placed above editor in a user-friendly way */}
-  <div className="position-relative" style={{ minHeight: "180px" }}>
-            <ReactQuill
-              ref={quillRef}
-              theme="snow"
-              value={message}
-              onChange={setMessage}
-              style={{ minHeight: "150px",maxHeight:"350px",overflow:"auto"}}
-              modules={{
-                toolbar: [
-                  [{ header: [1, 2, 3, false] }],
-                  [{ size: SizeStyle.whitelist }],
-                  [{ color: [] }, { background: [] }],
-                  ["bold", "italic", "underline", "strike"],
-                  [{ align: [] }],
-                  [{ list: "ordered" }, { list: "bullet" }],
-                  ["link"],
-                  ["clean"],
-                ],
-              }}
-              formats={[
-                "header",
-                "size",
-                "color",
-                "background",
-                "bold",
-                "italic",
-                "underline",
-                "strike",
-                "align",
-                "list",
-                "bullet",
-                "link",
-                "image",
-              ]}
-            />
+            <div className="position-relative" style={{ minHeight: "180px" }}>
+              <ReactQuill
+                ref={quillRef}
+                theme="snow"
+                value={message}
+                onChange={setMessage}
+                style={{ minHeight: "150px", maxHeight: "350px", overflow: "auto" }}
+                modules={{
+                  toolbar: [
+                    [{ header: [1, 2, 3, false] }],
+                    [{ size: SizeStyle.whitelist }],
+                    [{ color: [] }, { background: [] }],
+                    ["bold", "italic", "underline", "strike"],
+                    [{ align: [] }],
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    ["link"],
+                    ["clean"],
+                  ],
+                }}
+                formats={[
+                  "header",
+                  "size",
+                  "color",
+                  "background",
+                  "bold",
+                  "italic",
+                  "underline",
+                  "strike",
+                  "align",
+                  "list",
+                  "bullet",
+                  "link",
+                  "image",
+                ]}
+              />
 
-               {/* Button inside editor area at bottom */}
-    <div
-      className="position-absolute"
-      style={{ bottom: "0px",top:"7px", left: "630px", zIndex:1 }}
-    >
-      <button
-        type="button"
-        style={{ border: "none", background: "transparent", cursor: "pointer" }}
-        onClick={insertImageUrl}
-        title="Click to add image via URL"
-      >
-        🖼
-      </button>
-    </div>
-          </div>
+              {/* Add Image Button */}
+              <div
+                className="position-absolute"
+                style={{ bottom: "0px", top: "7px", left: "630px", zIndex: 1 }}
+              >
+                <button
+                  type="button"
+                  style={{ border: "none", background: "transparent", cursor: "pointer" }}
+                  onClick={() => setShowImageModal(true)}
+                  title="Click to add image via URL"
+                >
+                  🖼
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* Buttons */}
@@ -214,6 +226,43 @@ const EmailSender = () => {
               )}
             </button>
           </div>
+
+          {/* Image Modal */}
+          {showImageModal && (
+            <>
+              <div className="modal d-block" tabIndex="-1">
+                <div className="modal-dialog modal-dialog-centered">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="modal-title">Insert Image</h5>
+                      <button type="button" className="btn-close" onClick={() => setShowImageModal(false)}></button>
+                    </div>
+                    <div className="modal-body">
+                      <input
+                        type="text"
+                        className="form-control mb-2"
+                        placeholder="Enter image URL"
+                        value={imageUrl}
+                        onChange={(e) => setImageUrl(e.target.value)}
+                      />
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter redirect URL (optional)"
+                        value={redirectUrl}
+                        onChange={(e) => setRedirectUrl(e.target.value)}
+                      />
+                    </div>
+                    <div className="modal-footer">
+                      <button className="btn btn-secondary" onClick={() => setShowImageModal(false)}>Cancel</button>
+                      <button className="btn btn-primary" onClick={handleInsertImage}>Insert</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="modal-backdrop fade show" onClick={() => setShowImageModal(false)}></div>
+            </>
+          )}
 
           {/* Test Email Modal */}
           {showTestModal && (
@@ -265,22 +314,6 @@ const EmailSender = () => {
                 dangerouslySetInnerHTML={{ __html: message }}
                 style={{ maxHeight: "250px", overflowY: "auto", border: "1px solid #ddd", padding: "10px", borderRadius: "8px", background: "#fff" }}
               />
-              {/* <p><strong>Recipients:</strong></p>
-              {!showAllRecipients ? (
-                <ul>
-                  {csvData.slice(0, 5).map((row, i) => <li key={i}>{row.email}</li>)}
-                  {csvData.length > 5 && (
-                    <li style={{ color: "blue", cursor: "pointer", textDecoration: "underline" }} onClick={() => setShowAllRecipients(true)}>
-                      + {csvData.length - 5} more...
-                    </li>
-                  )}
-                </ul>
-              ) : (
-                <div style={{ maxHeight: "250px", overflowY: "auto", border: "1px solid #ddd", padding: "10px", borderRadius: "8px", background: "#fff" }}>
-                  <ul className="list-unstyled mb-2">{csvData.map((row, i) => <li key={i}>{row.email}</li>)}</ul>
-                  <button className="btn btn-sm btn-outline-secondary" onClick={() => setShowAllRecipients(false)}>Show Less</button>
-                </div>
-              )} */}
             </div>
           )}
         </div>
