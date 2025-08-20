@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Papa from "papaparse";
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Layout from "../../../layout/Index";
 import axios from "axios";
 import "./EmailSender.css";
 
+const SizeStyle = Quill.import('attributors/style/size');
+SizeStyle.whitelist = ['small', 'normal', 'large', 'huge'];
+Quill.register(SizeStyle, true);
 
 const EmailSender = () => {
   const [csvData, setCsvData] = useState([]);
@@ -19,45 +22,45 @@ const EmailSender = () => {
   const [testPassed, setTestPassed] = useState(false);
   const [showTestModal, setShowTestModal] = useState(false);
   const [testError, setTestError] = useState("");
+  const quillRef = useRef(null);
 
-  // ✅ Email validation
-  const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  };
+  // Email validation
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  // CSV File Upload
+  // CSV Upload
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
       Papa.parse(file, {
         header: true,
         skipEmptyLines: true,
-        complete: (result) => {
-          setCsvData(result.data);
-        },
+        complete: (result) => setCsvData(result.data),
       });
+    }
+  };
+
+  // Custom Image URL insert
+  const insertImageUrl = () => {
+    const url = prompt("Enter image URL");
+    if (url) {
+      const quill = quillRef.current.getEditor();
+      const range = quill.getSelection();
+      quill.insertEmbed(range?.index || 0, "image", url, "user");
     }
   };
 
   // Send Bulk Email
   const handleSend = async () => {
-    if (!csvData.length) {
-      alert("Please upload a CSV file with emails first!");
-      return;
-    }
+    if (!csvData.length) return alert("Upload CSV first!");
     setLoading(true);
     try {
       const payload = { subject, message, recipients: csvData };
+      console.log("payload",payload);
       const res = await axios.post("http://localhost:5000/send-email", payload, {
         headers: { "Content-Type": "application/json" },
       });
-
-      if (res.status === 200) {
-        alert("Emails sent successfully!");
-      } else {
-        alert("Error sending emails!");
-      }
+      if (res.status === 200) alert("Emails sent successfully!");
+      else alert("Error sending emails!");
     } catch (err) {
       console.error(err);
       alert("Server error!");
@@ -76,23 +79,15 @@ const EmailSender = () => {
     setTestLoading(true);
     try {
       const payload = { subject, message, recipient: testEmail };
-
-      const res = await axios.post(
-        "http://localhost:5000/send-test-email",
-        payload,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
+      const res = await axios.post("http://localhost:5000/send-test-email", payload, {
+        headers: { "Content-Type": "application/json" },
+      });
       if (res.status === 200) {
         alert("Test email sent successfully!");
         setTestPassed(true);
         setShowTestModal(false);
         setTestEmail("");
-      } else {
-        alert("Error sending test email!");
-      }
+      } else alert("Error sending test email!");
     } catch (err) {
       console.error(err);
       alert("Server error!");
@@ -129,19 +124,22 @@ const EmailSender = () => {
             />
           </div>
 
-          {/* Rich Text Editor with font size & color */}
+          {/* Message Editor */}
           <div className="mb-3">
             <label className="form-label">Message</label>
+            {/* Button placed above editor in a user-friendly way */}
+  <div className="position-relative" style={{ minHeight: "180px" }}>
             <ReactQuill
+              ref={quillRef}
               theme="snow"
               value={message}
               onChange={setMessage}
-              style={{ minHeight: "150px" }}
+              style={{ minHeight: "150px",maxHeight:"350px",overflow:"auto"}}
               modules={{
                 toolbar: [
                   [{ header: [1, 2, 3, false] }],
-                
-                  [{ color:[] }, { background:[] }], // ✅ text & bg color
+                  [{ size: SizeStyle.whitelist }],
+                  [{ color: [] }, { background: [] }],
                   ["bold", "italic", "underline", "strike"],
                   [{ align: [] }],
                   [{ list: "ordered" }, { list: "bullet" }],
@@ -151,6 +149,7 @@ const EmailSender = () => {
               }}
               formats={[
                 "header",
+                "size",
                 "color",
                 "background",
                 "bold",
@@ -161,8 +160,25 @@ const EmailSender = () => {
                 "list",
                 "bullet",
                 "link",
+                "image",
               ]}
             />
+
+               {/* Button inside editor area at bottom */}
+    <div
+      className="position-absolute"
+      style={{ bottom: "0px",top:"7px", left: "630px", zIndex: 10 }}
+    >
+      <button
+        type="button"
+         style={{border:"none"}}
+        onClick={insertImageUrl}
+        title="Click to add image via URL"
+      >
+        🖼
+      </button>
+    </div>
+          </div>
           </div>
 
           {/* Buttons */}
@@ -175,13 +191,10 @@ const EmailSender = () => {
               {preview ? "Hide Preview" : "Preview"}
             </button>
 
-            {/* Test Email Modal */}
             <button
               className="btn btn-warning"
               onClick={() => setShowTestModal(true)}
-              disabled={
-                !csvData.length || !subject.trim() || !message.trim() || !preview
-              }
+              disabled={!csvData.length || !subject.trim() || !message.trim() || !preview}
             >
               Send Test Email
             </button>
@@ -189,22 +202,11 @@ const EmailSender = () => {
             <button
               className="btn btn-primary"
               onClick={handleSend}
-              disabled={
-                loading ||
-                !csvData.length ||
-                !subject.trim() ||
-                !message.trim() ||
-                !preview ||
-                !testPassed
-              }
+              disabled={loading || !csvData.length || !subject.trim() || !message.trim() || !preview || !testPassed}
             >
               {loading ? (
                 <>
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
+                  <span className="spinner-border spinner-border-sm me-2"></span>
                   Sending...
                 </>
               ) : (
@@ -213,22 +215,15 @@ const EmailSender = () => {
             </button>
           </div>
 
-          {/* Modal for Test Email */}
+          {/* Test Email Modal */}
           {showTestModal && (
             <>
-              <div className="modal d-block" tabIndex="-1" role="dialog">
-                <div
-                  className="modal-dialog modal-dialog-centered"
-                  role="document"
-                >
+              <div className="modal d-block" tabIndex="-1">
+                <div className="modal-dialog modal-dialog-centered">
                   <div className="modal-content">
                     <div className="modal-header">
                       <h5 className="modal-title">Send Test Email</h5>
-                      <button
-                        type="button"
-                        className="btn-close"
-                        onClick={() => setShowTestModal(false)}
-                      ></button>
+                      <button type="button" className="btn-close" onClick={() => setShowTestModal(false)}></button>
                     </div>
                     <div className="modal-body">
                       <input
@@ -241,17 +236,10 @@ const EmailSender = () => {
                           if (testError) setTestError("");
                         }}
                       />
-                      {testError && (
-                        <div className="invalid-feedback">{testError}</div>
-                      )}
+                      {testError && <div className="invalid-feedback">{testError}</div>}
                     </div>
                     <div className="modal-footer">
-                      <button
-                        className="btn btn-secondary"
-                        onClick={() => setShowTestModal(false)}
-                      >
-                        Cancel
-                      </button>
+                      <button className="btn btn-secondary" onClick={() => setShowTestModal(false)}>Cancel</button>
                       <button
                         className="btn btn-warning"
                         onClick={handleTestEmail}
@@ -263,12 +251,7 @@ const EmailSender = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Backdrop */}
-              <div
-                className="modal-backdrop fade show"
-                onClick={() => setShowTestModal(false)}
-              ></div>
+              <div className="modal-backdrop fade show" onClick={() => setShowTestModal(false)}></div>
             </>
           )}
 
@@ -276,68 +259,26 @@ const EmailSender = () => {
           {preview && (
             <div className="mt-4 border p-3 rounded bg-light">
               <h5>📌 Preview</h5>
-              <p>
-                <strong>Subject:</strong> {subject}
-              </p>
-              <p>
-                <strong>Message:</strong>
-              </p>
+              <p><strong>Subject:</strong> {subject}</p>
+              <p><strong>Message:</strong></p>
               <div
                 dangerouslySetInnerHTML={{ __html: message }}
-                style={{
-                  maxHeight: "250px",
-                  overflowY: "auto",
-                  border: "1px solid #ddd",
-                  padding: "10px",
-                  borderRadius: "8px",
-                  background: "#fff",
-                }}
+                style={{ maxHeight: "250px", overflowY: "auto", border: "1px solid #ddd", padding: "10px", borderRadius: "8px", background: "#fff" }}
               />
-
-              <p>
-                <strong>Recipients:</strong>
-              </p>
-
+              <p><strong>Recipients:</strong></p>
               {!showAllRecipients ? (
                 <ul>
-                  {csvData.slice(0, 5).map((row, i) => (
-                    <li key={i}>{row.email}</li>
-                  ))}
+                  {csvData.slice(0, 5).map((row, i) => <li key={i}>{row.email}</li>)}
                   {csvData.length > 5 && (
-                    <li
-                      style={{
-                        color: "blue",
-                        cursor: "pointer",
-                        textDecoration: "underline",
-                      }}
-                      onClick={() => setShowAllRecipients(true)}
-                    >
+                    <li style={{ color: "blue", cursor: "pointer", textDecoration: "underline" }} onClick={() => setShowAllRecipients(true)}>
                       + {csvData.length - 5} more...
                     </li>
                   )}
                 </ul>
               ) : (
-                <div
-                  style={{
-                    maxHeight: "250px",
-                    overflowY: "auto",
-                    border: "1px solid #ddd",
-                    padding: "10px",
-                    borderRadius: "8px",
-                    background: "#fff",
-                  }}
-                >
-                  <ul className="list-unstyled mb-2">
-                    {csvData.map((row, i) => (
-                      <li key={i}>{row.email}</li>
-                    ))}
-                  </ul>
-                  <button
-                    className="btn btn-sm btn-outline-secondary"
-                    onClick={() => setShowAllRecipients(false)}
-                  >
-                    Show Less
-                  </button>
+                <div style={{ maxHeight: "250px", overflowY: "auto", border: "1px solid #ddd", padding: "10px", borderRadius: "8px", background: "#fff" }}>
+                  <ul className="list-unstyled mb-2">{csvData.map((row, i) => <li key={i}>{row.email}</li>)}</ul>
+                  <button className="btn btn-sm btn-outline-secondary" onClick={() => setShowAllRecipients(false)}>Show Less</button>
                 </div>
               )}
             </div>
