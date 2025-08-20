@@ -265,7 +265,7 @@ const EmailSender = () => {
                 dangerouslySetInnerHTML={{ __html: message }}
                 style={{ maxHeight: "250px", overflowY: "auto", border: "1px solid #ddd", padding: "10px", borderRadius: "8px", background: "#fff" }}
               />
-              <p><strong>Recipients:</strong></p>
+              {/* <p><strong>Recipients:</strong></p>
               {!showAllRecipients ? (
                 <ul>
                   {csvData.slice(0, 5).map((row, i) => <li key={i}>{row.email}</li>)}
@@ -280,7 +280,7 @@ const EmailSender = () => {
                   <ul className="list-unstyled mb-2">{csvData.map((row, i) => <li key={i}>{row.email}</li>)}</ul>
                   <button className="btn btn-sm btn-outline-secondary" onClick={() => setShowAllRecipients(false)}>Show Less</button>
                 </div>
-              )}
+              )} */}
             </div>
           )}
         </div>

@@ -1,5 +1,12 @@
 .ql-editor {
     min-height:200px;
-    position: relative;
-    z-index: 2;
+   
+}
+
+.ql-toolbar {
+  position: sticky;
+  top: 0;
+  z-index:1;
+  background: #fff;
+  border-bottom: 1px solid #ccc;
 }
