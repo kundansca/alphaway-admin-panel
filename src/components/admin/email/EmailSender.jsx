@@ -167,11 +167,11 @@ const EmailSender = () => {
                {/* Button inside editor area at bottom */}
     <div
       className="position-absolute"
-      style={{ bottom: "0px",top:"7px", left: "630px", zIndex: 10 }}
+      style={{ bottom: "0px",top:"7px", left: "630px", zIndex:1 }}
     >
       <button
         type="button"
-         style={{border:"none"}}
+        style={{ border: "none", background: "transparent", cursor: "pointer" }}
         onClick={insertImageUrl}
         title="Click to add image via URL"
       >
