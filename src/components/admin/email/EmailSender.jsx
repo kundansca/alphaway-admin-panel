@@ -5,6 +5,7 @@ import "react-quill/dist/quill.snow.css";
 import Layout from "../../../layout/Index";
 import axios from "axios";
 import "./EmailSender.css";
+import { useSelector } from "react-redux";
 
 const SizeStyle = Quill.import('attributors/style/size');
 SizeStyle.whitelist = ['small', 'normal', 'large', 'huge'];
@@ -61,6 +62,9 @@ const EmailSender = () => {
   const [textColor, setTextColor] = useState("#000000");
   const [backgroundColor, setBackgroundColor] = useState("#ffffff");
   const quillRef = useRef(null);
+  const [testName, setTestName] = useState("");
+   const authData = useSelector((state) => state.auth);
+  const BASEURL = import.meta.env.VITE_APP_BASE_API_URL;
 
   // Email validation
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -112,6 +116,11 @@ const EmailSender = () => {
     setRedirectUrl("");
   };
 
+ 
+
+
+  
+
   // Send Bulk Email
   const handleSend = async () => {
     if (!csvFile) return alert("Upload CSV first!");
@@ -119,11 +128,13 @@ const EmailSender = () => {
     try {
       const formData = new FormData();
       formData.append("subject", subject);
-      formData.append("message", message);
-      formData.append("csvFile", csvFile); // attach the file
+      formData.append("template", message);
+      formData.append("file", csvFile); // attach the file
 
-      const res = await axios.post("http://localhost:5000/send-email", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const res = await axios.post(`${BASEURL}/email/send-bulk`, formData, {
+        headers: { "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${authData.userData.accessToken}`
+         },
       });
 
       if (res.status === 200) alert("Emails sent successfully!");
@@ -145,10 +156,13 @@ const EmailSender = () => {
     setTestError("");
     setTestLoading(true);
     try {
-      const payload = { subject, message, recipient: testEmail };
-      console.log("test email payload", JSON.stringify(payload));
-      const res = await axios.post("http://localhost:5000/send-test-email", payload, {
-        headers: { "Content-Type": "application/json" },
+      const payload = { emailSubject:subject,template:message, recipientEmail: testEmail,recipientName: testName };
+
+      console.log("test email payload",payload);
+      const res = await axios.post(`${BASEURL}/email/send-test`, payload, {
+        headers: { "Content-Type": "application/json",
+              Authorization: `Bearer ${authData.userData.accessToken}`
+         },
       });
       if (res.status === 200) {
         alert("Test email sent successfully!");
@@ -345,6 +359,16 @@ const EmailSender = () => {
                       <button type="button" className="btn-close" onClick={() => setShowTestModal(false)}></button>
                     </div>
                     <div className="modal-body">
+                  {/* Name Input */}
+                    <input
+                      type="text"
+                      className="form-control mb-2"
+                      placeholder="Enter your name"
+                      value={testName}
+                      onChange={(e) => setTestName(e.target.value)}
+                    />
+
+
                       <input
                         type="email"
                         className={`form-control ${testError ? "is-invalid" : ""}`}
@@ -362,7 +386,7 @@ const EmailSender = () => {
                       <button
                         className="btn btn-warning"
                         onClick={handleTestEmail}
-                        disabled={testLoading || !testEmail.trim()}
+                        disabled={testLoading || !testEmail.trim() || !testName.trim()}
                       >
                         {testLoading ? "Sending..." : "Send Test Email"}
                       </button>

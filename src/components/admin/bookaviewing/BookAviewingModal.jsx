@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 
 const BookAViewingModal = ({ show, handleClose, bookAViewing }) => {
+
   const [form, setForm] = useState({
     viewerName: '',
     firstName: '',
@@ -27,7 +28,7 @@ const BookAViewingModal = ({ show, handleClose, bookAViewing }) => {
 }
   useEffect(() => {
     if (bookAViewing) {
-
+   
        
       setForm({
         viewerName: bookAViewing.viewerName || '',

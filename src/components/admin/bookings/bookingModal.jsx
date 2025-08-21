@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 
 function BookingModal({ show, handleClose, booking, mode }) {
-
+  console.log(booking);
   const initialForm = {
     firstName: "",
     lastName: "",
@@ -24,7 +24,7 @@ function BookingModal({ show, handleClose, booking, mode }) {
 
  const options = { day: '2-digit', month: 'long', year: 'numeric' };
 const formattedDate = date.toLocaleDateString('en-GB', options);
-      setFormData({ ...initialForm, ...booking,university:booking?.university?.name,gender:booking?.gender?.name,dob:formattedDate});
+      setFormData({ ...initialForm, ...booking,university:booking?.university?.name,gender: booking?.gender?.description,dob:formattedDate});
     } else {
       setFormData(initialForm);
     }

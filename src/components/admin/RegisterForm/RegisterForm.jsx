@@ -27,8 +27,7 @@ const RegisterForm = () => {
   const validateForm = () => {
     let newErrors = {};
 
-    if (!formData.firstName.trim()) newErrors.firstName = "First name is required.";
-    if (!formData.lastName.trim()) newErrors.lastName = "Last name is required.";
+    if (!formData.name.trim()) newErrors.name = "Name is required.";
     if (!formData.email.trim()) {
       newErrors.email = "Email is required.";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -75,8 +74,7 @@ const RegisterForm = () => {
       console.log("Form Submitted:", response.data);
       setMessage("✅ User added successfully!");
       setFormData({
-        firstName: "",
-        lastName: "",
+        name: "",
         email: "",
         role: "",
         password: "",
@@ -113,36 +111,21 @@ const RegisterForm = () => {
               <form onSubmit={handleSubmit}>
                 {/* First Name */}
                 <div className="mb-3">
-                  <label className="form-label">First Name</label>
+                  <label className="form-label">Full Name</label>
                   <input
                     type="text"
                     className="form-control shadow-sm"
-                    placeholder="Enter your first name"
-                    name="firstName"
-                    value={formData.firstName}
+                    placeholder="Enter your full name"
+                    name="name"
+                    value={formData.name}
                     onChange={handleChange}
                   />
-                  {errors.firstName && (
-                    <small className="text-danger">{errors.firstName}</small>
+                  {errors.name && (
+                    <small className="text-danger">{errors.name}</small>
                   )}
                 </div>
 
-                {/* Last Name */}
-                <div className="mb-3">
-                  <label className="form-label">Last Name</label>
-                  <input
-                    type="text"
-                    className="form-control shadow-sm"
-                    placeholder="Enter your last name"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                  />
-                  {errors.lastName && (
-                    <small className="text-danger">{errors.lastName}</small>
-                  )}
-                </div>
-
+              
                 {/* Email */}
                 <div className="mb-3">
                   <label className="form-label">Email</label>

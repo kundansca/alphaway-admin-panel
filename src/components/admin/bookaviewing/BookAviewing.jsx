@@ -112,6 +112,7 @@ function BookAViewing() {
     link.click();
     document.body.removeChild(link);
   };
+  
 
   return (
     <Layout>
