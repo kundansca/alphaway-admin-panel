@@ -10,8 +10,41 @@ const SizeStyle = Quill.import('attributors/style/size');
 SizeStyle.whitelist = ['small', 'normal', 'large', 'huge'];
 Quill.register(SizeStyle, true);
 
+// Custom Color Picker Component
+const CustomColorPicker = ({ label, onChange, defaultValue }) => {
+  const [color, setColor] = useState(defaultValue || "#000000");
+  
+  return (
+    <div className="color-picker-container">
+      <span className="color-picker-label">{label}</span>
+      <div className="color-picker-wrapper">
+        <input
+          type="color"
+          value={color}
+          onChange={(e) => {
+            setColor(e.target.value);
+            onChange(e.target.value);
+          }}
+          className="color-picker-input"
+        />
+        <input
+          type="text"
+          value={color}
+          onChange={(e) => {
+            setColor(e.target.value);
+            onChange(e.target.value);
+          }}
+          className="color-text-input"
+          placeholder="#000000"
+        />
+      </div>
+    </div>
+  );
+};
+
 const EmailSender = () => {
   const [csvData, setCsvData] = useState([]);
+  const [csvFile, setCsvFile] = useState();
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [preview, setPreview] = useState(false);
@@ -25,6 +58,8 @@ const EmailSender = () => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [redirectUrl, setRedirectUrl] = useState("");
+  const [textColor, setTextColor] = useState("#000000");
+  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
   const quillRef = useRef(null);
 
   // Email validation
@@ -33,13 +68,29 @@ const EmailSender = () => {
   // CSV Upload
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
+
     if (file) {
       Papa.parse(file, {
         header: true,
         skipEmptyLines: true,
         complete: (result) => setCsvData(result.data),
       });
+      setCsvFile(file);
     }
+  };
+
+  // Apply text color
+  const applyTextColor = (color) => {
+    const quill = quillRef.current.getEditor();
+    quill.format('color', color);
+    setTextColor(color);
+  };
+
+  // Apply background color
+  const applyBackgroundColor = (color) => {
+    const quill = quillRef.current.getEditor();
+    quill.format('background', color);
+    setBackgroundColor(color);
   };
 
   // Insert Image from Modal
@@ -63,14 +114,18 @@ const EmailSender = () => {
 
   // Send Bulk Email
   const handleSend = async () => {
-    if (!csvData.length) return alert("Upload CSV first!");
+    if (!csvFile) return alert("Upload CSV first!");
     setLoading(true);
     try {
-      const payload = { subject, message, recipients: csvData };
-      console.log("payload", JSON.stringify(payload));
-      const res = await axios.post("http://localhost:5000/send-email", payload, {
-        headers: { "Content-Type": "application/json" },
+      const formData = new FormData();
+      formData.append("subject", subject);
+      formData.append("message", message);
+      formData.append("csvFile", csvFile); // attach the file
+
+      const res = await axios.post("http://localhost:5000/send-email", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
+
       if (res.status === 200) alert("Emails sent successfully!");
       else alert("Error sending emails!");
     } catch (err) {
@@ -140,6 +195,21 @@ const EmailSender = () => {
           {/* Message Editor */}
           <div className="mb-3">
             <label className="form-label">Message</label>
+            
+            {/* Color Pickers */}
+            <div className="d-flex gap-3 mb-2">
+              <CustomColorPicker 
+                label="Text Color" 
+                onChange={applyTextColor} 
+                defaultValue={textColor}
+              />
+              <CustomColorPicker 
+                label="Background Color" 
+                onChange={applyBackgroundColor} 
+                defaultValue={backgroundColor}
+              />
+            </div>
+            
             <div className="position-relative" style={{ minHeight: "180px" }}>
               <ReactQuill
                 ref={quillRef}
