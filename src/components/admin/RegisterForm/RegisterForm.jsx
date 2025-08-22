@@ -182,6 +182,7 @@ const RegisterForm = () => {
                     onChange={handleChange}
                   >
                     <option value="">Select Role</option>
+                    <option value="ADMIN">Admin</option>
                     <option value="SALE">Sale</option>
                     <option value="MARKETER">Marketer</option>
                     <option value="OPERATOR">Operator</option>
