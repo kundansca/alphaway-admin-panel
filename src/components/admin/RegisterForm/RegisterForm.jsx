@@ -84,7 +84,7 @@ const RegisterForm = () => {
         role: formData.role,
       };
 
-      const response = await axios.post(`${BASEURL}/add-user`, payload, {
+       await axios.post(`${BASEURL}/add-user`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authData.userData.accessToken}`,
@@ -94,7 +94,7 @@ const RegisterForm = () => {
       Swal.fire({
         icon: "success",
         title: "Success!",
-        text: "User added successfully!",
+        text: "Registration successful!",
         confirmButtonText: "OK",
       });
 
@@ -108,6 +108,7 @@ const RegisterForm = () => {
       });
       setErrors({});
     } catch (error) {
+      console.log(error);
       if (
         error.response &&
         (error.response.status === 400 || error.response.status === 409)
@@ -115,7 +116,7 @@ const RegisterForm = () => {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: "Email already exists!",
+          text: error?.response?.data?.errors[0] || "Email already exists!",
           confirmButtonText: "OK",
         });
       } else {
@@ -137,7 +138,7 @@ const RegisterForm = () => {
         <div className="row justify-content-center">
           <div className="col-md-6">
             <div className="card shadow-lg p-4 rounded-4 border-0">
-              <h3 className="text-center mb-4 fw-bold">Register a User</h3>
+              <h3 className="text-center mb-4 fw-bold">Registration</h3>
 
               <form onSubmit={handleSubmit}>
                 {/* Full Name */}
@@ -186,7 +187,7 @@ const RegisterForm = () => {
                     <option value="SALE">Sale</option>
                     <option value="MARKETER">Marketer</option>
                     <option value="OPERATOR">Operator</option>
-                    <option value="USER">User</option>
+                   
                   </select>
                   {errors.role && (
                     <small className="text-danger">{errors.role}</small>

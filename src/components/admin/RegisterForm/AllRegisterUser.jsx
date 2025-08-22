@@ -100,6 +100,7 @@ function AllRegisterUser() {
         headers: { Authorization: `Bearer ${authData.userData.accessToken}` },
       });
       const users = response.data.content || [];
+     
       users.reverse();
       setFilteredData(users);
       setOriginalData(users);
@@ -173,13 +174,13 @@ function AllRegisterUser() {
       const payload = {
         name: editForm.name,
         email: editForm.email,
-        password:editForm.password,
-        role:editForm.role
+       enabled:editForm.enabled
+        
       };
       if (editForm.password) payload.password = editForm.password;
         // console.log("edit payload",payload);
       const response = await axios.put(
-        `${BASEURL}/users/${selectedUser.id}`,
+        `${BASEURL}/user/${selectedUser.id}`,
         payload,
         { headers: { Authorization: `Bearer ${authData.userData.accessToken}` } }
       );
@@ -202,13 +203,6 @@ function AllRegisterUser() {
     });
       setShowModal(false);
     } catch (err) {
-   
-    //   Swal.fire({
-    //   icon: "error",
-    //   title: "Update failed!",
-    //   text: "Failed to update user. Please try again.",
-    //   confirmButtonText: "OK",
-    // });
         Toast.fire({
         icon: "error",
         title: "Failed to update user. Please try again.",
@@ -273,7 +267,7 @@ function AllRegisterUser() {
                         onChange={handleSelectAll}
                       />
                     </th>
-                    <th>#</th>
+                    <th>Sr. No</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
@@ -411,14 +405,16 @@ function AllRegisterUser() {
                     <Form.Select
                       name="role"
                       value={editForm.role}
+                      disabled={true}
                       onChange={handleEditChange}
+                      
                     >
                       <option value="">Select Role</option>
                       <option value="ADMIN">Admin</option>
                       <option value="SALE">Sale</option>
                       <option value="MARKETER">Marketer</option>
                       <option value="OPERATOR">Operator</option>
-                      <option value="USER">User</option>
+                      
                     </Form.Select>
                     {formErrors.role && (
                       <small className="text-danger">{formErrors.role}</small>
@@ -431,6 +427,7 @@ function AllRegisterUser() {
                     <Form.Select
                       name="enabled"
                       value={editForm.enabled}
+                    
                       onChange={(e) =>
                         setEditForm({
                           ...editForm,
