@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Navbar.css";
 import { Link,useNavigate} from "react-router-dom";
 import { userDropdownItems } from '../data/navbarDropdown';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { logout } from "../features/auth/authSlice";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 
 const Navbar = ({ toggleSidebar }) => {
@@ -12,6 +14,8 @@ const Navbar = ({ toggleSidebar }) => {
   const dropdownRef = useRef(null);
   const dispatch=useDispatch();
   const navigate=useNavigate();
+  const BASEURL = import.meta.env.VITE_APP_BASE_API_URL;
+  const authData = useSelector((state) => state.auth);
 
 
   useEffect(() => {
@@ -26,12 +30,54 @@ const Navbar = ({ toggleSidebar }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  function handleClick(event){
+ async function sendLogoutRequest() {
+  try {
+    const response = await axios.post(
+      `${BASEURL}/auth/logout`,
+       {},
+      {
+        headers: {
+         Authorization: `Bearer ${authData.userData.accessToken}`,
+        },
+      }
+    );
+   
+
+    if (response.status === 200) {
+      return true; 
+    } else {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "error",
+        title: "Logout failed! Please try again.",
+        showConfirmButton: false,
+        timer: 3000,
+      });
+      return false;
+    }
+  } catch (error) {
+
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "error",
+      title: "Something went wrong!",
+      showConfirmButton: false,
+      timer: 3000,
+    });
+    return false;
+  }
+}
+  async function handleClick(event){
     
       event.preventDefault();
     if(event.target.title==="Logout"){
+      let islogout= await sendLogoutRequest();
+       if(islogout===true){
       dispatch(logout());
       navigate("/login",{replace:true});
+       }
      }
 
   }
