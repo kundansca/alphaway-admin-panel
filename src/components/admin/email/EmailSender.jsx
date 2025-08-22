@@ -6,6 +6,7 @@ import Layout from "../../../layout/Index";
 import axios from "axios";
 import "./EmailSender.css";
 import { useSelector } from "react-redux";
+import DOMPurify from "dompurify";
 
 const SizeStyle = Quill.import('attributors/style/size');
 SizeStyle.whitelist = ['small', 'normal', 'large', 'huge'];
@@ -106,7 +107,8 @@ const EmailSender = () => {
     if (redirectUrl.trim()) {
       quill.clipboard.dangerouslyPasteHTML(
         range.index,
-        `<a href="${redirectUrl}" target="_blank"><img src="${imageUrl}" alt="image" /></a>`
+        `<a href="${redirectUrl}" target="_blank"><img src="${imageUrl}" alt="image" /></a>`,
+       
       );
     } else {
       quill.insertEmbed(range.index, "image", imageUrl, "user");
@@ -116,7 +118,18 @@ const EmailSender = () => {
     setRedirectUrl("");
   };
 
- 
+ function sanitizeContent(content) {
+  // Step 1: Decode escaped characters (remove backslashes)
+  let unescaped = content.replace(/\\"/g, '"');
+
+  // Step 2: Sanitize so no XSS or unwanted tags go to server
+  let clean = DOMPurify.sanitize(unescaped, {
+    ALLOWED_TAGS: ["a", "img", "p", "br", "b", "i", "u", "span", "div"],
+    ALLOWED_ATTR: ["href", "src", "alt", "title", "style", "target"],
+  });
+
+  return clean;
+}
 
 
   
@@ -140,7 +153,7 @@ const EmailSender = () => {
       if (res.status === 200) alert("Emails sent successfully!");
       else alert("Error sending emails!");
     } catch (err) {
-      console.error(err);
+     
       alert("Server error!");
     } finally {
       setLoading(false);
@@ -156,9 +169,10 @@ const EmailSender = () => {
     setTestError("");
     setTestLoading(true);
     try {
-      const payload = { emailSubject:subject,template:message, recipientEmail: testEmail,recipientName: testName };
-
-      console.log("test email payload",payload);
+       let finalContent =sanitizeContent(message);
+      const payload = { emailSubject:subject,template:finalContent, recipientEmail: testEmail,recipientName: testName };
+      
+     
       const res = await axios.post(`${BASEURL}/email/send-test`, payload, {
         headers: { "Content-Type": "application/json",
               Authorization: `Bearer ${authData.userData.accessToken}`
@@ -171,7 +185,7 @@ const EmailSender = () => {
         setTestEmail("");
       } else alert("Error sending test email!");
     } catch (err) {
-      console.error(err);
+      
       alert("Server error!");
     } finally {
       setTestLoading(false);

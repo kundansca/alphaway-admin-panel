@@ -65,6 +65,14 @@ const RegisterForm = () => {
     return newErrors;
   };
 
+    const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -91,12 +99,10 @@ const RegisterForm = () => {
         },
       });
 
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: "Registration successful!",
-        confirmButtonText: "OK",
-      });
+       Toast.fire({
+      icon: "success",
+      title: "Registration successful!",
+       });
 
       // reset form
       setFormData({
@@ -108,24 +114,20 @@ const RegisterForm = () => {
       });
       setErrors({});
     } catch (error) {
-      console.log(error);
+
       if (
         error.response &&
         (error.response.status === 400 || error.response.status === 409)
       ) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: error?.response?.data?.errors[0] || "Email already exists!",
-          confirmButtonText: "OK",
-        });
+        Toast.fire({
+        icon: "error",
+        title: error?.response?.data?.errors[0] || "Email already exists!",
+         });
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error!",
-          text: "Something went wrong. Please try again.",
-          confirmButtonText: "OK",
-        });
+         Toast.fire({
+        icon: "error",
+        title: "Something went wrong. Please try again.",
+      });
       }
     } finally {
       setLoading(false);
