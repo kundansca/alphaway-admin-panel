@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Layout from "../../../layout/Index";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
     role: "",
     password: "",
@@ -14,34 +15,47 @@ const RegisterForm = () => {
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const authData = useSelector((state) => state.auth);
+  const BASEURL = import.meta.env.VITE_APP_BASE_API_URL;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    // Field change hone par error hatao
+    // field change hote hi uska error hatao
     setErrors({ ...errors, [name]: "" });
   };
 
   const validateForm = () => {
     let newErrors = {};
 
-    if (!formData.name.trim()) newErrors.name = "Name is required.";
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required.";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid.";
+    // ✅ Name Validation
+    if (!formData.name.trim()) {
+      newErrors.name = "Full name is required.";
+    } else if (formData.name.trim().length < 3) {
+      newErrors.name = "Name must be at least 3 characters.";
     }
 
-    if (!formData.role) newErrors.role = "Please select a role.";
+    // ✅ Email Validation
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address.";
+    }
 
+    // ✅ Role Validation
+    if (!formData.role) {
+      newErrors.role = "Please select a role.";
+    }
+
+    // ✅ Password Validation
     if (!formData.password) {
       newErrors.password = "Password is required.";
     } else if (formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters.";
     }
 
+    // ✅ Confirm Password Validation
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = "Confirm password is required.";
     } else if (formData.password !== formData.confirmPassword) {
@@ -62,17 +76,29 @@ const RegisterForm = () => {
 
     try {
       setLoading(true);
-      setMessage("");
-      
 
-      // 👉 Replace with your backend API
-      const response = await axios.post(
-        "https://jsonplaceholder.typicode.com/posts",
-        formData
-      );
+      let payload = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+      };
 
-      console.log("Form Submitted:", response.data);
-      setMessage("✅ User added successfully!");
+      const response = await axios.post(`${BASEURL}/add-user`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authData.userData.accessToken}`,
+        },
+      });
+
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "User added successfully!",
+        confirmButtonText: "OK",
+      });
+
+      // reset form
       setFormData({
         name: "",
         email: "",
@@ -82,8 +108,24 @@ const RegisterForm = () => {
       });
       setErrors({});
     } catch (error) {
-      console.error("Error submitting form:", error);
-      setMessage("❌ Something went wrong. Please try again.");
+      if (
+        error.response &&
+        (error.response.status === 400 || error.response.status === 409)
+      ) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Email already exists!",
+          confirmButtonText: "OK",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "Something went wrong. Please try again.",
+          confirmButtonText: "OK",
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -95,21 +137,10 @@ const RegisterForm = () => {
         <div className="row justify-content-center">
           <div className="col-md-6">
             <div className="card shadow-lg p-4 rounded-4 border-0">
-              <h3 className="text-center mb-4 fw-bold">Add User</h3>
-
-              {/* Status message */}
-              {message && (
-                <div
-                  className={`alert ${
-                    message.includes("✅") ? "alert-success" : "alert-danger"
-                  }`}
-                >
-                  {message}
-                </div>
-              )}
+              <h3 className="text-center mb-4 fw-bold">Register a User</h3>
 
               <form onSubmit={handleSubmit}>
-                {/* First Name */}
+                {/* Full Name */}
                 <div className="mb-3">
                   <label className="form-label">Full Name</label>
                   <input
@@ -125,12 +156,11 @@ const RegisterForm = () => {
                   )}
                 </div>
 
-              
                 {/* Email */}
                 <div className="mb-3">
                   <label className="form-label">Email</label>
                   <input
-                    type="email"
+                    type="text"
                     className="form-control shadow-sm"
                     placeholder="Enter your email"
                     name="email"
@@ -152,9 +182,10 @@ const RegisterForm = () => {
                     onChange={handleChange}
                   >
                     <option value="">Select Role</option>
-                    <option value="Admin">Admin</option>
-                    <option value="Manager">Manager</option>
-                    <option value="User">User</option>
+                    <option value="SALE">Sale</option>
+                    <option value="MARKETER">Marketer</option>
+                    <option value="OPERATOR">Operator</option>
+                    <option value="USER">User</option>
                   </select>
                   {errors.role && (
                     <small className="text-danger">{errors.role}</small>
@@ -189,7 +220,9 @@ const RegisterForm = () => {
                     onChange={handleChange}
                   />
                   {errors.confirmPassword && (
-                    <small className="text-danger">{errors.confirmPassword}</small>
+                    <small className="text-danger">
+                      {errors.confirmPassword}
+                    </small>
                   )}
                 </div>
 
@@ -200,12 +233,15 @@ const RegisterForm = () => {
                   disabled={loading}
                 >
                   {loading ? (
-                    <div
-                      className="spinner-border spinner-border-sm text-light"
-                      role="status"
-                    >
-                      <span className="visually-hidden">Loading...</span>
-                    </div>
+                    <>
+                      <div
+                        className="spinner-border spinner-border-sm text-light me-2"
+                        role="status"
+                      >
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                      Registering...
+                    </>
                   ) : (
                     "Register"
                   )}

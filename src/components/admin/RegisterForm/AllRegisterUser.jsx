@@ -44,11 +44,9 @@ function AllRegisterUser() {
   const handleSearch = () => {
     const s = searchVal.toLowerCase();
     const result = originalData.filter((user) =>
-      (user.firstName || "").toLowerCase().includes(s) ||
-      (user.lastName || "").toLowerCase().includes(s) ||
-      (user.email || "").toLowerCase().includes(s) ||
-      (user.role || "").toLowerCase().includes(s) ||
-      (user.status || "").toLowerCase().includes(s)
+      (user.name || "").toLowerCase().includes(s) ||
+      (user.email || "").toLowerCase().includes(s)
+    
     );
     setFilteredData(result);
     setCurrentPage(1);
@@ -101,7 +99,10 @@ function AllRegisterUser() {
       const response = await axios.get(`${BASEURL}/users`, {
         headers: { Authorization: `Bearer ${authData.userData.accessToken}` },
       });
+      console.log("all user",response.data);
+      
       const users = response.data.content || [];
+     users.reverse();
       setFilteredData(users);
       setOriginalData(users);
     } catch (err) {
@@ -162,7 +163,7 @@ function AllRegisterUser() {
   };
 
   const renderStatus = (status) => {
-    const isActive = status?.toLowerCase() === "active";
+    const isActive = status ===true;
     return (
       <span className={`badge ${isActive ? "bg-success" : "bg-danger"}`}>
         {isActive ? "Active" : "Inactive"}
@@ -180,7 +181,7 @@ function AllRegisterUser() {
           <div className="col-6 d-flex gap-2">
             <input
               className="form-control"
-              placeholder="Search name, email, role, status"
+              placeholder="Search name, email"
               value={searchVal}
               onChange={e => setSearchVal(e.target.value)}
               onKeyDown={e => e.key === "Enter" && handleSearch()}
@@ -233,10 +234,10 @@ function AllRegisterUser() {
                           />
                         </td>
                         <td>{(currentPage - 1) * perPage + i + 1}</td>
-                        <td>{`${user.firstName || ""} ${user.lastName || ""}`}</td>
+                        <td>{`${user.firstName || ""} ${user.name || ""}`}</td>
                         <td>{user.email || "-"}</td>
-                        <td>{user.role || "-"}</td>
-                        <td>{renderStatus(user.status)}</td>
+                        <td>{user.roleType.name || "-"}</td>
+                        <td>{renderStatus(user.enabled)}</td>
                         <td>
                           <button
                             className="btn btn-sm btn-warning"
