@@ -17,6 +17,8 @@ const RegisterForm = () => {
   const [loading, setLoading] = useState(false);
   const authData = useSelector((state) => state.auth);
   const BASEURL = import.meta.env.VITE_APP_BASE_API_URL;
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -197,16 +199,29 @@ const RegisterForm = () => {
                 </div>
 
                 {/* Password */}
-                <div className="mb-3">
+                <div className="mb-3 position-relative">
                   <label className="form-label">Password</label>
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     className="form-control shadow-sm"
                     placeholder="Enter password"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
                   />
+                  {formData.password!=="" && <span
+                    className="position-absolute end-0 translate-middle-y me-3"
+                    style={{ cursor: "pointer" ,top:"50px"}}
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    <i
+                      className={`bi ${
+                        showPassword ? "bi-eye-slash" : "bi-eye"
+                      }`}
+                    ></i>
+                  </span>
+                 }
+                  
                   {errors.password && (
                     <small className="text-danger">{errors.password}</small>
                   )}

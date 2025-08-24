@@ -48,7 +48,7 @@ function Bookings() {
         setAllBookings(data);
         setFilteredData(data);
       } catch (error) {
-        console.error("Error fetching bookings:", error);
+      
       } finally {
         setLoading(false);
       }

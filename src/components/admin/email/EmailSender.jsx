@@ -276,8 +276,8 @@ const EmailSender = () => {
 
               {/* Add Image Button */}
               <div
-                className="position-absolute"
-                style={{ bottom: "0px", top: "7px", left: "630px", zIndex: 1 }}
+                className="image-url-btn"
+            
               >
                 <button
                   type="button"

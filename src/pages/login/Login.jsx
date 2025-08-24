@@ -114,20 +114,37 @@ const Login = () => {
                           <i className="ri-lock-line icon"></i>
                           <label className="label">Password</label>
                         </div>
-                        <div className="input-field">
+                        <div className="input-field" style={{position:"relative"}}>
                       
                           <input
                             className="input input--active"
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             name="password"
                             placeholder="Enter Password"
                             value={formData.password}
                             onChange={handleChange}
-                              style={{ paddingRight: "40px" }}
+                            style={{ paddingRight: "40px" }}
                             
                           />
-                     
-                         
+                      
+                      {formData.password!=="" && <span
+                        onClick={() => setShowPassword(!showPassword)}
+                        style={{
+                          position: "absolute",
+                          zIndex: 1,
+                          right: "10px",
+                          cursor: "pointer",
+                          top: "50%",
+                          transform: "translateY(-50%)"
+                        }}
+                      >
+                        {showPassword ? (
+                          <i className="bi bi-eye-slash"></i> 
+                        ) : (
+                          <i className="bi bi-eye"></i>
+                        )}
+                      </span>
+                }                                        
                  
                           {fieldErrors.password && (
                           <div className="field-error text-danger">{fieldErrors.password}</div>
@@ -148,9 +165,7 @@ const Login = () => {
                       </button>
                     </div>
 
-                    <div className="login-forgot">
-                      <p className="text">Forgot your password?</p>
-                    </div>
+                  
                   </form>
 
                   <div className="login-footer">

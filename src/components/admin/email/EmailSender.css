@@ -162,4 +162,23 @@
     width: 100%;
   }
 }
+.image-url-btn {
+  position: absolute;
+  bottom: 0px;
+  top: 7px;
+  right: 45%;
+  z-index: 1;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+@media screen and (min-width: 1025px) and (max-width: 1440px) {
+  .image-url-btn {
+    right: 40%;
+  }
+}
 
+@media screen and (max-width: 1024px) {
+  .image-url-btn {
+    right: 10px;
+  }
+}
