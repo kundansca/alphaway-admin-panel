@@ -7,9 +7,9 @@ const Footer = () => {
       <div className="footer-content">
         <span>© {new Date().getFullYear()} Alphaway - Admin Panel</span>
         <div className="footer-links">
-          <a href="/privacy">Privacy Policy</a>
-          <a href="/terms">Terms of Service</a>
-          <a href="/contact">Contact Us</a>
+          <a href="https://alpha-way.com/privacy-policy" target="_blank">Privacy Policy</a>
+          <a href="https://alpha-way.com/terms-condition" target="_blank">Terms of Service</a>
+          <a href="https://alpha-way.com/contact-us" target="_blank">Contact Us</a>
         </div>
       </div>
     </footer>
