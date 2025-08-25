@@ -229,15 +229,12 @@ function Bookings() {
           </div>
 
           <div className="col-md-4 d-flex justify-content-end gap-1">
-            <button
-              className="btn btn-outline-secondary"
-              onClick={handleExportCSV}
-            >
+            <button className="btn btn-success" onClick={handleExportCSV}>
               {selectedRows.length
                 ? `Export CSV (${selectedRows.length})`
                 : "Export CSV"}
             </button>
-            <button
+            {/* <button
               className="btn btn-primary"
               onClick={() => {
                 setSelectedViewer(null);
@@ -245,7 +242,7 @@ function Bookings() {
               }}
             >
               <AddIcon /> Add
-            </button>
+            </button> */}
           </div>
         </div>
 

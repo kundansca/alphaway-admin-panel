@@ -161,9 +161,9 @@ function BookAViewing() {
               <SearchIcon />
             </button>
           </div>
-          <div className="col-2 d-flex justify-content gap-1 mt-3 mt-md-0">
+          <div className="col-2 d-flex justify-content-end gap-1 mt-3 mt-md-0">
             <button
-              className="btn btn-outline-secondary"
+              className="btn btn-success"
               onClick={handleExportCSV}
               disabled={!!error}
             >
@@ -172,7 +172,7 @@ function BookAViewing() {
                 : "Export CSV"}
             </button>
 
-            <button
+            {/* <button
               className="btn btn-primary"
               onClick={() => {
                 setSelectedViewer(null);
@@ -181,7 +181,7 @@ function BookAViewing() {
               disabled={!!error}
             >
               <AddIcon /> Add
-            </button>
+            </button> */}
           </div>
         </div>
 
