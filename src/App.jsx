@@ -80,7 +80,7 @@ const App = () => {
             }
           />
           <Route
-            path="/booking-viewing/:id"
+            path="/viewing-booking/:id"
             element={
               <Protected>
                 <BookingViewingDetails />

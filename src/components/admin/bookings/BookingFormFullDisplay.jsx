@@ -28,7 +28,7 @@ const BookingFormFullDisplay = () => {
   useEffect(() => {
     const fetchBookingForm = async () => {
       try {
-        const res = await axios.get(`${BASEURL}/booking/forms/${id}`, {
+        const res = await axios.get(`${BASEURL}/book/viewing/${id}`, {
           headers: {
             Authorization: `Bearer ${authData.userData.accessToken}`,
           },
