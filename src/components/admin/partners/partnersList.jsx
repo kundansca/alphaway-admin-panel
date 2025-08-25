@@ -5,6 +5,7 @@ import { AddIcon, SearchIcon } from "../../../config/Icons";
 import PartnerModal from "./partnersModal";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function PartnerList() {
   const perPage = 10;
@@ -36,13 +37,34 @@ function PartnerList() {
       (p) =>
         (p.name || "").toLowerCase().includes(s) ||
         (p.email || "").toLowerCase().includes(s) ||
-        (p.phone || "").toLowerCase().includes(s) ||
         (p.university || "").toLowerCase().includes(s)
     );
     setFilteredData(result);
     setCurrentPage(1);
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return date.toLocaleString(undefined, {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
+  const formatDateOnly = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return date.toLocaleDateString(undefined, {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
+  };
   const handleExportCSV = () => {
     const headers = [
       "ID",
@@ -50,12 +72,13 @@ function PartnerList() {
       "Email",
       "Phone",
       "Nationality",
-      "DOB",
       "City",
+      "DOB",
       "University",
       "Campus",
       "Budget",
       "Comments",
+      "Created Date & Time",
     ];
     const data = selectedRows.length
       ? originalData.filter((p) => selectedRows.includes(p.id))
@@ -66,12 +89,14 @@ function PartnerList() {
       p.email,
       p.phone,
       p.nationality,
-      p.dob,
       p.city,
+      formatDateOnly(p.dob),
+
       p.university,
       p.campus,
       p.budget,
       p.comments || "",
+      formatDate(p.createDate) || "N/A",
     ]);
     const csv = [headers, ...rows]
       .map((r) => r.map((cell) => `"${cell}"`).join(","))
@@ -113,7 +138,6 @@ function PartnerList() {
       setFilteredData(serverData);
       setOriginalData(serverData);
     } catch (error) {
-      console.error("Failed to fetch partner data:", error);
       setError("Failed to fetch partner data. Please try again later.");
     } finally {
       setLoading(false);
@@ -134,7 +158,7 @@ function PartnerList() {
           <div className="col-8 d-flex gap-2">
             <input
               className="form-control"
-              placeholder="Search name, email, phone, university"
+              placeholder="Search name, email, university"
               value={searchVal}
               onChange={(e) => setSearchVal(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -186,13 +210,14 @@ function PartnerList() {
                         onChange={handleSelectAll}
                       />
                     </th>
-                    <th>#</th>
+                    <th>S.No.</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Phone</th>
-                    <th>University</th>
-                    <th>City</th>
+
                     <th>Nationality</th>
+                    <th>City</th>
+                    <th>University</th>
+                    <th>Created Date & Time</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -210,20 +235,19 @@ function PartnerList() {
                         <td>{(currentPage - 1) * perPage + i + 1}</td>
                         <td>{p.name}</td>
                         <td>{p.email}</td>
-                        <td>{p.phone}</td>
-                        <td>{p.university}</td>
-                        <td>{p.city}</td>
                         <td>{p.nationality}</td>
+                        <td>{p.city}</td>
+
+                        <td>{p.university}</td>
+                        <td>{formatDate(p.createDate)}</td>
                         <td>
-                          <button
-                            className="btn btn-sm btn-outline-primary"
-                            onClick={() => {
-                              setSelectedPartner(p);
-                              setShowModal(true);
-                            }}
+                          <Link
+                            className="btn btn-sm btn-outline-success"
+                            to={`/partner-students/${p.id}`}
+                            target="_blank"
                           >
-                            View
-                          </button>
+                            View All Details
+                          </Link>
                         </td>
                       </tr>
                     ))

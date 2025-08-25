@@ -77,11 +77,9 @@ const PartnerStudentDetails = () => {
             Authorization: `Bearer ${authData.userData.accessToken}`,
           },
         });
-        console.log(res.data);
+
         setStudentData(res.data);
-      } catch (err) {
-        console.error("Error fetching student details:", err);
-      }
+      } catch (err) {}
     };
     fetchStudentData();
   }, [id, authData?.userData?.accessToken]);
