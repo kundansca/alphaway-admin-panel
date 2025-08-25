@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../../layout/Index";
 import Pagination from "../../shared/Pagination";
 import { AddIcon, SearchIcon } from "../../../config/Icons";
-import BookAViewingModal from "./BookAviewingModal";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -16,8 +15,6 @@ function BookAViewing() {
   const [paginatedViewers, setPaginatedViewers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchVal, setSearchVal] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [selectedViewer, setSelectedViewer] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -309,15 +306,6 @@ function BookAViewing() {
             />
           </>
         )}
-
-        <BookAViewingModal
-          show={showModal}
-          handleClose={() => {
-            setShowModal(false);
-            setSelectedViewer(null);
-          }}
-          bookAViewing={selectedViewer}
-        />
       </div>
     </Layout>
   );
