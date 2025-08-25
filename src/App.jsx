@@ -21,6 +21,7 @@ import AllRegisterUser from "./components/admin/RegisterForm/AllRegisterUser";
 import BookingFormFullDisplay from "./components/admin/bookings/BookingFormFullDisplay";
 import BookingViewingDetails from "./components/admin/bookaviewing/BookingViewingDetails";
 import PartnerStudentDetails from "./components/admin/partners/PartnerStudentDetails";
+import EnquiryDetails from "./components/admin/enquiry/EnquiryDetails";
 
 const App = () => {
   let { userData } = useSelector((state) => {
@@ -111,6 +112,14 @@ const App = () => {
             element={
               <Protected>
                 <Enquiry />
+              </Protected>
+            }
+          />
+          <Route
+            path="/enquiries/:id"
+            element={
+              <Protected>
+                <EnquiryDetails />
               </Protected>
             }
           />

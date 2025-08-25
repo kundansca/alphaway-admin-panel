@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../../layout/Index";
 import Pagination from "../../shared/Pagination";
 import { AddIcon, SearchIcon } from "../../../config/Icons";
-import PartnerModal from "./partnersModal";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -16,8 +15,6 @@ function PartnerList() {
   const [searchVal, setSearchVal] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedPartner, setSelectedPartner] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -270,13 +267,6 @@ function PartnerList() {
             />
           </>
         )}
-
-        <PartnerModal
-          show={showModal}
-          handleClose={() => setShowModal(false)}
-          partner={selectedPartner}
-          mode={selectedPartner ? "view" : "add"}
-        />
       </div>
     </Layout>
   );

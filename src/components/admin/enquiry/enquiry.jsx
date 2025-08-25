@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../../layout/Index";
 import Pagination from "../../shared/Pagination";
 import { AddIcon, SearchIcon } from "../../../config/Icons";
-import EnquiryModal from "./enquiryModal";
+
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 function EnquiryList() {
   const perPage = 10;
@@ -15,8 +16,6 @@ function EnquiryList() {
   const [searchVal, setSearchVal] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedViewer, setSelectedViewer] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const BASEURL = import.meta.env.VITE_APP_BASE_API_URL;
@@ -32,19 +31,40 @@ function EnquiryList() {
 
   const handleSearch = () => {
     const s = searchVal.toLowerCase();
-    const result = originalData.filter((b) =>
-      (b.firstName || "").toLowerCase().includes(s) ||
-      (b.lastName || "").toLowerCase().includes(s) ||
-      (b.email || "").toLowerCase().includes(s) ||
-      (b.phone || "").toLowerCase().includes(s) ||
-      (b.message || "").toLowerCase().includes(s)
+    const result = originalData.filter(
+      (b) =>
+        (b.firstName || "").toLowerCase().includes(s) ||
+        (b.lastName || "").toLowerCase().includes(s) ||
+        (b.email || "").toLowerCase().includes(s) ||
+        (b.phone || "").toLowerCase().includes(s)
     );
     setFilteredData(result);
     setCurrentPage(1);
   };
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return date.toLocaleString(undefined, {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
 
   const handleExportCSV = () => {
-    const headers = ["ID", "First Name", "Last Name", "Email", "Phone", "Message"];
+    const headers = [
+      "ID",
+      "First Name",
+      "Last Name",
+      "Email",
+      "Phone",
+      "Enquiry Channel",
+      "Message",
+      "Enquiry Date & Time",
+    ];
     const data = selectedRows.length
       ? originalData.filter((b, i) => selectedRows.includes(b.id || i + 1))
       : originalData;
@@ -54,10 +74,12 @@ function EnquiryList() {
       b.lastName || "",
       b.email || "",
       b.phone || "",
-      b.message || ""
+      b.enquiryChannel,
+      b.message || "",
+      b.createDate,
     ]);
     const csv = [headers, ...rows]
-      .map(r => r.map(cell => `"${cell}"`).join(","))
+      .map((r) => r.map((cell) => `"${cell}"`).join(","))
       .join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const link = document.createElement("a");
@@ -76,15 +98,17 @@ function EnquiryList() {
     setSelectAll(!selectAll);
   };
 
-  const handleRowSelect = id => {
-    setSelectedRows(prev =>
-      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+  const handleRowSelect = (id) => {
+    setSelectedRows((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   };
 
   const truncateText = (text, maxLength = 50) => {
     if (!text) return "-";
-    return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+    return text.length > maxLength
+      ? text.substring(0, maxLength) + "..."
+      : text;
   };
 
   async function fetchEnquiry() {
@@ -96,12 +120,11 @@ function EnquiryList() {
           Authorization: `Bearer ${authData.userData.accessToken}`,
         },
       });
-     
+
       const serverData = response.data.content || [];
       setFilteredData(serverData);
       setOriginalData(serverData);
     } catch (error) {
-     
       setError("Failed to fetch enquiry data. Please try again later.");
     } finally {
       setLoading(false);
@@ -122,10 +145,10 @@ function EnquiryList() {
           <div className="col-8 d-flex gap-2">
             <input
               className="form-control"
-              placeholder="Search name, email, phone, message"
+              placeholder="Search name, email, phone"
               value={searchVal}
-              onChange={e => setSearchVal(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && handleSearch()}
+              onChange={(e) => setSearchVal(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
             <button className="btn btn-success" onClick={handleSearch}>
               <SearchIcon />
@@ -168,7 +191,8 @@ function EnquiryList() {
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Message</th>
+                    <th>Enquiry Channel</th>
+                    <th>Enquiry Date & Time</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -184,20 +208,22 @@ function EnquiryList() {
                           />
                         </td>
                         <td>{(currentPage - 1) * perPage + i + 1}</td>
-                        <td>{(b.firstName || "") + " " + (b.lastName || "")}</td>
-                        <td>{b.email || "-"}</td>
-                        <td>{b.phone || "-"}</td>
-                        <td>{truncateText(b.message)}</td>
                         <td>
-                          <button
-                            className="btn btn-sm btn-outline-primary"
-                            onClick={() => {
-                              setSelectedViewer(b);
-                              setShowModal(true);
-                            }}
+                          {(b.firstName || "") + " " + (b.lastName || "")}
+                        </td>
+                        <td>{b.email || "N/A"}</td>
+                        <td>{b.phone || "N/A"}</td>
+                        <td>{b.enquiryChannel || "N/A"}</td>
+                        <td>{formatDate(b.createDate)}</td>
+
+                        <td>
+                          <Link
+                            className="btn btn-sm btn-outline-success"
+                            to={`/enquiries/${b.id}`}
+                            target="_blank"
                           >
-                            View
-                          </button>
+                            View All Details
+                          </Link>
                         </td>
                       </tr>
                     ))
@@ -221,14 +247,6 @@ function EnquiryList() {
             />
           </>
         )}
-
-        {/* Modal */}
-        <EnquiryModal
-          show={showModal}
-          handleClose={() => setShowModal(false)}
-          booking={selectedViewer}
-          mode={selectedViewer ? "view" : "add"}
-        />
       </div>
     </Layout>
   );
