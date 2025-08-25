@@ -5,6 +5,7 @@ import { AddIcon, SearchIcon } from "../../../config/Icons";
 import BookingModal from "./bookingModal";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 function Bookings() {
   const perPage = 10;
@@ -66,17 +67,12 @@ function Bookings() {
         b.firstName?.toLowerCase().includes(s) ||
         b.lastName?.toLowerCase().includes(s) ||
         b.email?.toLowerCase().includes(s) ||
-        b.phone?.toLowerCase().includes(s) ||
-        b.university?.name?.toLowerCase().includes(s) ||
-        b.property?.name?.toLowerCase().includes(s) ||
-        b.gender?.name?.toLowerCase().includes(s) ||
-        b.nationality?.toLowerCase().includes(s)
+        b.property?.name?.toLowerCase().includes(s)
     );
     setFilteredData(result);
     setCurrentPage(1);
   };
 
-  // ✅ Export selected/all bookings to CSV
   const handleExportCSV = () => {
     const headers = [
       "ID",
@@ -95,6 +91,37 @@ function Bookings() {
       "City",
       "Country",
       "Property",
+      "Room ID",
+      "Duration",
+      "Special Requirements",
+      "Postal Code",
+      "Tenancy",
+      "Deposit",
+      "Payment Frequency",
+      "Price",
+      "Medical Condition",
+      "Medical Condition Description",
+      "Residential Phone",
+      "Guarantor First Name",
+      "Guarantor Last Name",
+      "Guarantor Address1",
+      "Guarantor Address2",
+      "Guarantor City",
+      "Guarantor Country",
+      "Guarantor Postal Code",
+      "Guarantor Email",
+      "Guarantor Phone",
+      "Emergency First Name",
+      "Emergency Last Name",
+      "Emergency Relationship",
+      "Emergency Mobile Phone",
+      "Emergency Day Phone",
+      "Emergency Address1",
+      "Emergency Address2",
+      "Emergency City",
+      "Emergency Country",
+      "Emergency Postal Code",
+      "Created Date",
     ];
 
     const data = selectedRows.length
@@ -102,22 +129,53 @@ function Bookings() {
       : allBookings;
 
     const rows = data.map((b) => [
-      b.id,
-      b.firstName,
-      b.lastName,
-      b.email,
-      b.phone,
-      b.dateOfBirth,
-      b.gender?.name,
-      b.university?.name || b.universityOther,
-      b.academicYear,
-      b.yearOfStudy,
-      b.nationality,
-      b.religion,
-      `${b.address1} ${b.address2}`,
-      b.city,
-      b.country,
-      b.property?.name,
+      b.id ?? "N/A",
+      b.firstName ?? "N/A",
+      b.lastName ?? "N/A",
+      b.email ?? "N/A",
+      b.phone ?? "N/A",
+      b.dateOfBirth ?? "N/A",
+      b.gender?.name ?? "N/A",
+      b.university?.name || b.universityOther || "N/A",
+      b.academicYear ?? "N/A",
+      b.yearOfStudy ?? "N/A",
+      b.nationality ?? "N/A",
+      b.religion ?? "N/A",
+      `${b.address1 || "N/A"} ${b.address2 || ""}`.trim(),
+      b.city ?? "N/A",
+      b.country ?? "N/A",
+      b.property?.name ?? "N/A",
+      b.room?.id ?? "N/A",
+      b.duration ?? "N/A",
+      b.specialRequirements ?? "N/A",
+      b.postalCode ?? "N/A",
+      b.tenancy ?? "N/A",
+      b.deposit ?? "N/A",
+      b.paymentFrequency ?? "N/A",
+      b.price ?? "N/A",
+      b.medicalCondition !== undefined ? b.medicalCondition : "N/A",
+      b.medicalConditionDescription ?? "N/A",
+      b.residentialPhone ?? "N/A",
+      b.guarantorFirstName ?? "N/A",
+      b.guarantorLastName ?? "N/A",
+      b.guarantorAddress1 ?? "N/A",
+      b.guarantorAddress2 ?? "N/A",
+      b.guarantorCity ?? "N/A",
+      b.guarantorCountry ?? "N/A",
+      b.guarantorPostalCode ?? "N/A",
+      b.guarantorEmail ?? "N/A",
+      b.guarantorPhone ?? "N/A",
+      b.emergencyFirstName ?? "N/A",
+      b.emergencyLastName ?? "N/A",
+      b.emergencyRelationship ?? "N/A",
+      b.emergencyMobilePhone ?? "N/A",
+      b.emergencyDayPhone ?? "N/A",
+      b.emergencyAddress1 ?? "N/A",
+      b.emergencyAddress2 ?? "N/A",
+      b.emergencyCity ?? "N/A",
+      b.emergencyCountry ?? "N/A",
+      b.emergencyPostalCode ?? "N/A",
+      b.createDate ? new Date(b.createDate).toLocaleString() : "N/A",
     ]);
 
     const csv = [headers, ...rows]
@@ -163,7 +221,7 @@ function Bookings() {
           <div className="col-8 d-flex gap-2">
             <input
               className="form-control"
-              placeholder="Search name, email, phone, uni"
+              placeholder="Search name, email,property"
               value={searchVal}
               onChange={(e) => setSearchVal(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -214,12 +272,9 @@ function Bookings() {
                     <th>#</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Phone</th>
-                    <th>Gender</th>
-                    <th>Property</th>
-                    <th>University</th>
-                    <th>Nationality</th>
+                    <th>Country</th>
                     <th>City</th>
+                    <th>Property</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -238,15 +293,12 @@ function Bookings() {
                         <td>
                           {b.firstName} {b.lastName}
                         </td>
-                        <td>{b.email}</td>
-                        <td>{b.phone}</td>
-                        <td>{b.gender?.name}</td>
-                        <td>{b.property?.name}</td>
-                        <td>{b.university?.name || b.universityOther}</td>
-                        <td>{b.nationality}</td>
-                        <td>{b.city}</td>
+                        <td>{b.email || "N/A"}</td>
+                        <td>{b.country || "N/A"}</td>
+                        <td>{b.city || "N/A"}</td>
+                        <td>{b.property?.name || "N/A"}</td>
                         <td>
-                          <button
+                          {/* <button
                             className="btn btn-sm btn-outline-primary"
                             onClick={() => {
                               setSelectedViewer(b);
@@ -254,7 +306,16 @@ function Bookings() {
                             }}
                           >
                             View
-                          </button>
+                          </button> */}
+                          <td>
+                            <Link
+                              className="btn btn-sm btn-outline-success"
+                              to={`/bookings/${b.id}`}
+                              target="_blank"
+                            >
+                              View All Details
+                            </Link>
+                          </td>
                         </td>
                       </tr>
                     ))
