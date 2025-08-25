@@ -5,6 +5,7 @@ import { AddIcon, SearchIcon } from "../../../config/Icons";
 import BookAViewingModal from "./BookAviewingModal";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function BookAViewing() {
   const perPage = 10;
@@ -33,7 +34,6 @@ function BookAViewing() {
         },
       });
 
-      console.log(response.data.content);
       const data = response.data.content || [];
       setAllViewers(data);
       setCurrentPage(1);
@@ -55,9 +55,7 @@ function BookAViewing() {
       return (
         viewer.firstName?.toLowerCase().includes(query) ||
         viewer.lastName?.toLowerCase().includes(query) ||
-        viewer.email?.toLowerCase().includes(query) ||
-        viewer.phone?.toLowerCase().includes(query) ||
-        viewer.viewerName?.toLowerCase().includes(query)
+        viewer.email?.toLowerCase().includes(query)
       );
     });
 
@@ -87,9 +85,10 @@ function BookAViewing() {
       "Last Name",
       "Email",
       "Phone",
-      "Viewing Date",
       "Room Type",
-      "Tenancy",
+      "Property Name",
+      "Viewing Date",
+      "Created Date & Time",
     ];
 
     const exportData = selectedRows.length
@@ -97,14 +96,31 @@ function BookAViewing() {
       : allViewers;
 
     const rows = exportData.map((v) => [
-      v.viewerName || "",
-      v.firstName || "",
-      v.lastName || "",
-      v.email || "",
-      v.phone || "",
-      v.viewingDateTime || "",
-      v.room?.id ? `Room #${v.room.id}` : "",
-      v.property?.name || "",
+      v.viewerName || "N/A",
+      v.firstName || "N/A",
+      v.lastName || "N/A",
+      v.email || "N/A",
+      v.phone || "N/A",
+      v.room?.id ? `Room #${v.room.id}` : "N/A",
+      v.property?.name || "N/A",
+      v.viewingDateTime
+        ? new Date(v.viewingDateTime).toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : "N/A",
+      v.createDate
+        ? new Date(v.createDate).toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : "N/A",
     ]);
 
     const csv = [headers, ...rows]
@@ -131,7 +147,7 @@ function BookAViewing() {
             <input
               type="text"
               className="form-control"
-              placeholder="Name, Email, Mobile"
+              placeholder="Name, Email"
               value={searchVal}
               onChange={(e) => setSearchVal(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && setCurrentPage(1)}
@@ -198,14 +214,11 @@ function BookAViewing() {
                         onChange={handleSelectAll}
                       />
                     </th>
-                    <th>#</th>
-                    <th>Viewer Name</th>
+                    <th>S.No.</th>
                     <th>Full Name</th>
                     <th>Email</th>
-                    <th>Phone</th>
                     <th>Viewing Date</th>
-                    <th>Room Type</th>
-                    <th>Tenancy</th>
+                    <th>Created Date & Time</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -216,28 +229,33 @@ function BookAViewing() {
                         `${viewer.firstName || ""} ${
                           viewer.lastName || ""
                         }`.trim() || "N/A";
-                      const email = viewer.email || "N/A";
-                      const phone = viewer.phone || "N/A";
-                      const viewerName = viewer.viewerName || "N/A";
-                      const roomType = viewer.room?.id
-                        ? `Room #${viewer.room.id}`
-                        : "N/A";
-                      const tenancy = viewer.property?.name || "N/A";
 
-                      let viewingDate = "N/A";
-                      if (viewer.viewingDateTime) {
-                        const dateObj = new Date(viewer.viewingDateTime);
-                        viewingDate = dateObj.toLocaleString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        });
-                      }
+                      const email = viewer.email || "N/A";
+
+                      const viewingDate = viewer.viewingDateTime
+                        ? new Date(viewer.viewingDateTime).toLocaleString(
+                            "en-GB",
+                            {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          )
+                        : "N/A";
+                      const createdDateAndTime = viewer.createDate
+                        ? new Date(viewer.createDate).toLocaleString("en-GB", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : "N/A";
 
                       return (
-                        <tr key={index}>
+                        <tr key={viewer.id}>
                           <td>
                             <input
                               type="checkbox"
@@ -246,23 +264,20 @@ function BookAViewing() {
                             />
                           </td>
                           <td>{(currentPage - 1) * perPage + index + 1}</td>
-                          <td>{viewerName}</td>
+
                           <td>{fullName}</td>
                           <td>{email}</td>
-                          <td>{phone}</td>
+
                           <td>{viewingDate}</td>
-                          <td>{roomType}</td>
-                          <td>{tenancy}</td>
+                          <td>{createdDateAndTime}</td>
                           <td>
-                            <button
-                              className="btn btn-sm btn-outline-primary"
-                              onClick={() => {
-                                setSelectedViewer(viewer);
-                                setShowModal(true);
-                              }}
+                            <Link
+                              className="btn btn-sm btn-outline-success"
+                              to={`/viewing-booking/${viewer.id}`}
+                              target="_blank"
                             >
-                              View
-                            </button>
+                              View All Details
+                            </Link>
                           </td>
                         </tr>
                       );
@@ -281,7 +296,9 @@ function BookAViewing() {
             <Pagination
               totalItems={
                 allViewers.filter((viewer) =>
-                  `${viewer.firstName} ${viewer.lastName} ${viewer.email} ${viewer.phone} ${viewer.viewerName}`
+                  `${viewer.firstName || ""} ${viewer.lastName || ""} ${
+                    viewer.email || ""
+                  } ${viewer.phone || ""} ${viewer.viewerName || ""}`
                     .toLowerCase()
                     .includes(searchVal.toLowerCase())
                 ).length
