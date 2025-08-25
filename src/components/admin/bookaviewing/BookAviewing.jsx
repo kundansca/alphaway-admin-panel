@@ -32,7 +32,8 @@ function BookAViewing() {
           Authorization: `Bearer ${authData.userData.accessToken}`,
         },
       });
-    
+
+      console.log(response.data.content);
       const data = response.data.content || [];
       setAllViewers(data);
       setCurrentPage(1);
@@ -81,8 +82,14 @@ function BookAViewing() {
 
   const handleExportCSV = () => {
     const headers = [
-      "Viewer Name", "First Name", "Last Name", "Email",
-      "Phone", "Viewing Date", "Room Type", "Tenancy"
+      "Viewer Name",
+      "First Name",
+      "Last Name",
+      "Email",
+      "Phone",
+      "Viewing Date",
+      "Room Type",
+      "Tenancy",
     ];
 
     const exportData = selectedRows.length
@@ -97,7 +104,7 @@ function BookAViewing() {
       v.phone || "",
       v.viewingDateTime || "",
       v.room?.id ? `Room #${v.room.id}` : "",
-      v.property?.name || ""
+      v.property?.name || "",
     ]);
 
     const csv = [headers, ...rows]
@@ -112,7 +119,6 @@ function BookAViewing() {
     link.click();
     document.body.removeChild(link);
   };
-  
 
   return (
     <Layout>
@@ -133,7 +139,12 @@ function BookAViewing() {
             />
           </div>
           <div className="col-4">
-            <button type="button" className="btn btn-success" onClick={() => setCurrentPage(1)} disabled={!!error}>
+            <button
+              type="button"
+              className="btn btn-success"
+              onClick={() => setCurrentPage(1)}
+              disabled={!!error}
+            >
               <SearchIcon />
             </button>
           </div>
@@ -201,11 +212,16 @@ function BookAViewing() {
                 <tbody>
                   {paginatedViewers.length > 0 ? (
                     paginatedViewers.map((viewer, index) => {
-                      const fullName = `${viewer.firstName || ""} ${viewer.lastName || ""}`.trim() || "N/A";
+                      const fullName =
+                        `${viewer.firstName || ""} ${
+                          viewer.lastName || ""
+                        }`.trim() || "N/A";
                       const email = viewer.email || "N/A";
                       const phone = viewer.phone || "N/A";
                       const viewerName = viewer.viewerName || "N/A";
-                      const roomType = viewer.room?.id ? `Room #${viewer.room.id}` : "N/A";
+                      const roomType = viewer.room?.id
+                        ? `Room #${viewer.room.id}`
+                        : "N/A";
                       const tenancy = viewer.property?.name || "N/A";
 
                       let viewingDate = "N/A";

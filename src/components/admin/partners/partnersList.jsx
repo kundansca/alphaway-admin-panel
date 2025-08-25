@@ -32,11 +32,12 @@ function PartnerList() {
 
   const handleSearch = () => {
     const s = searchVal.toLowerCase();
-    const result = originalData.filter(p =>
-      (p.name || "").toLowerCase().includes(s) ||
-      (p.email || "").toLowerCase().includes(s) ||
-      (p.phone || "").toLowerCase().includes(s) ||
-      (p.university || "").toLowerCase().includes(s)
+    const result = originalData.filter(
+      (p) =>
+        (p.name || "").toLowerCase().includes(s) ||
+        (p.email || "").toLowerCase().includes(s) ||
+        (p.phone || "").toLowerCase().includes(s) ||
+        (p.university || "").toLowerCase().includes(s)
     );
     setFilteredData(result);
     setCurrentPage(1);
@@ -44,18 +45,36 @@ function PartnerList() {
 
   const handleExportCSV = () => {
     const headers = [
-      "ID", "Name", "Email", "Phone", "Nationality", "DOB",
-      "City", "University", "Campus", "Budget", "Comments"
+      "ID",
+      "Name",
+      "Email",
+      "Phone",
+      "Nationality",
+      "DOB",
+      "City",
+      "University",
+      "Campus",
+      "Budget",
+      "Comments",
     ];
     const data = selectedRows.length
-      ? originalData.filter(p => selectedRows.includes(p.id))
+      ? originalData.filter((p) => selectedRows.includes(p.id))
       : originalData;
-    const rows = data.map(p => [
-      p.id, p.name, p.email, p.phone, p.nationality, p.dob,
-      p.city, p.university, p.campus, p.budget, p.comments || ""
+    const rows = data.map((p) => [
+      p.id,
+      p.name,
+      p.email,
+      p.phone,
+      p.nationality,
+      p.dob,
+      p.city,
+      p.university,
+      p.campus,
+      p.budget,
+      p.comments || "",
     ]);
     const csv = [headers, ...rows]
-      .map(r => r.map(cell => `"${cell}"`).join(","))
+      .map((r) => r.map((cell) => `"${cell}"`).join(","))
       .join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const link = document.createElement("a");
@@ -69,14 +88,14 @@ function PartnerList() {
   };
 
   const handleSelectAll = () => {
-    if (!selectAll) setSelectedRows(partners.map(p => p.id));
+    if (!selectAll) setSelectedRows(partners.map((p) => p.id));
     else setSelectedRows([]);
     setSelectAll(!selectAll);
   };
 
-  const handleRowSelect = id => {
-    setSelectedRows(prev =>
-      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+  const handleRowSelect = (id) => {
+    setSelectedRows((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   };
 
@@ -90,6 +109,7 @@ function PartnerList() {
         },
       });
       const serverData = response.data.content || [];
+
       setFilteredData(serverData);
       setOriginalData(serverData);
     } catch (error) {
@@ -116,23 +136,29 @@ function PartnerList() {
               className="form-control"
               placeholder="Search name, email, phone, university"
               value={searchVal}
-              onChange={e => setSearchVal(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && handleSearch()}
+              onChange={(e) => setSearchVal(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
             <button className="btn btn-success" onClick={handleSearch}>
               <SearchIcon />
             </button>
           </div>
           <div className="col-md-4 d-flex justify-content-end gap-1">
-            <button className="btn btn-outline-secondary" onClick={handleExportCSV}>
+            <button
+              className="btn btn-outline-secondary"
+              onClick={handleExportCSV}
+            >
               {selectedRows.length
                 ? `Export CSV (${selectedRows.length})`
                 : "Export CSV"}
             </button>
-            <button className="btn btn-primary" onClick={() => {
-              setSelectedPartner(null);
-              setShowModal(true);
-            }}>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                setSelectedPartner(null);
+                setShowModal(true);
+              }}
+            >
               <AddIcon /> Add
             </button>
           </div>
@@ -153,7 +179,13 @@ function PartnerList() {
               <table className="table table-bordered table-hover align-middle">
                 <thead className="table-dark">
                   <tr>
-                    <th><input type="checkbox" checked={selectAll} onChange={handleSelectAll} /></th>
+                    <th>
+                      <input
+                        type="checkbox"
+                        checked={selectAll}
+                        onChange={handleSelectAll}
+                      />
+                    </th>
                     <th>#</th>
                     <th>Name</th>
                     <th>Email</th>
@@ -183,11 +215,13 @@ function PartnerList() {
                         <td>{p.city}</td>
                         <td>{p.nationality}</td>
                         <td>
-                          <button className="btn btn-sm btn-outline-primary"
+                          <button
+                            className="btn btn-sm btn-outline-primary"
                             onClick={() => {
                               setSelectedPartner(p);
                               setShowModal(true);
-                            }}>
+                            }}
+                          >
                             View
                           </button>
                         </td>
@@ -195,7 +229,9 @@ function PartnerList() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="9" className="text-center">No data</td>
+                      <td colSpan="9" className="text-center">
+                        No data
+                      </td>
                     </tr>
                   )}
                 </tbody>

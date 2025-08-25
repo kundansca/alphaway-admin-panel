@@ -1,33 +1,30 @@
-import { StrictMode } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Use Routes and Route for routing
-import Login from './pages/login/Login'; // Assuming Login is in the 'pages' folder
-import Dashboard from './components/admin/dashboard/Dashboard'; // Import the Dashboard component
-import AuthGuard from './auth/AuthGuard';  // Import the AuthGuard component
+import { StrictMode } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom"; // Use Routes and Route for routing
+import Login from "./pages/login/Login"; // Assuming Login is in the 'pages' folder
+import Dashboard from "./components/admin/dashboard/Dashboard"; // Import the Dashboard component
+import AuthGuard from "./auth/AuthGuard"; // Import the AuthGuard component
 
-import Logout from './components/Logout '; // Include the Logout component
-import NotFound from './components/NotFound'; // Include the Logout component
-import Bookings from './components/admin/bookings/bookings';
-import Enquiry from './components/admin/enquiry/enquiry';
-import StudentList from './components/admin/studentList/studentList';
-import PartnerList from './components/admin/partners/partnersList';
-import BookAViewing from './components/admin/bookaviewing/BookAviewing';
-import ActivityTracker from './components/auth/ActivityTracker';
-import { useSelector } from 'react-redux';
-import Protected from './components/auth/Protected';
-import LoginProtected from "./components/auth/LoginProtected"
-import EmailSender from './components/admin/email/EmailSender';
-import RegisterForm from './components/admin/RegisterForm/RegisterForm';
-import AllRegisterUser from './components/admin/RegisterForm/AllRegisterUser';
-
-
+import Logout from "./components/Logout "; // Include the Logout component
+import NotFound from "./components/NotFound"; // Include the Logout component
+import Bookings from "./components/admin/bookings/bookings";
+import Enquiry from "./components/admin/enquiry/enquiry";
+import StudentList from "./components/admin/studentList/studentList";
+import PartnerList from "./components/admin/partners/partnersList";
+import BookAViewing from "./components/admin/bookaviewing/BookAviewing";
+import ActivityTracker from "./components/auth/ActivityTracker";
+import { useSelector } from "react-redux";
+import Protected from "./components/auth/Protected";
+import LoginProtected from "./components/auth/LoginProtected";
+import EmailSender from "./components/admin/email/EmailSender";
+import RegisterForm from "./components/admin/RegisterForm/RegisterForm";
+import AllRegisterUser from "./components/admin/RegisterForm/AllRegisterUser";
+import BookingFormFullDisplay from "./components/admin/bookings/BookingFormFullDisplay";
+import BookingViewingDetails from "./components/admin/bookaviewing/BookingViewingDetails";
 
 const App = () => {
-  let {userData}=useSelector((state)=>
-    {
-     
-      return state.auth;
-    });
- 
+  let { userData } = useSelector((state) => {
+    return state.auth;
+  });
 
   return (
     <StrictMode>
@@ -35,13 +32,18 @@ const App = () => {
         {/* Shared ToastContainer */}
         {/* <Toast /> */}
 
+        {/* Define routes for both / and /login */}
 
-   
-          {/* Define routes for both / and /login */}
-          
-         <Routes>
+        <Routes>
           {/* Public Route */}
-          <Route path="/login" element={<LoginProtected><Login /></LoginProtected>} />
+          <Route
+            path="/login"
+            element={
+              <LoginProtected>
+                <Login />
+              </LoginProtected>
+            }
+          />
 
           {/* Protected Routes */}
           <Route
@@ -61,8 +63,6 @@ const App = () => {
             }
           />
 
-          
-         
           <Route
             path="/admin/logout"
             element={
@@ -80,6 +80,15 @@ const App = () => {
             }
           />
           <Route
+            path="/booking-viewing/:id"
+            element={
+              <Protected>
+                <BookingViewingDetails />
+              </Protected>
+            }
+          />
+
+          <Route
             path="/admin/bookings"
             element={
               <Protected>
@@ -87,6 +96,15 @@ const App = () => {
               </Protected>
             }
           />
+          <Route
+            path="/bookings/:id"
+            element={
+              <Protected>
+                <BookingFormFullDisplay />
+              </Protected>
+            }
+          />
+
           <Route
             path="/admin/enquiry"
             element={
@@ -96,7 +114,7 @@ const App = () => {
             }
           />
 
-           <Route
+          <Route
             path="/add-user"
             element={
               <Protected>
@@ -104,7 +122,7 @@ const App = () => {
               </Protected>
             }
           />
-           <Route
+          <Route
             path="/registered-users"
             element={
               <Protected>
@@ -112,7 +130,7 @@ const App = () => {
               </Protected>
             }
           />
-             <Route
+          <Route
             path="/email"
             element={
               <Protected>
@@ -143,9 +161,7 @@ const App = () => {
 
         {/* Track activity if user is logged in */}
         {userData && <ActivityTracker />}
-      
       </BrowserRouter>
-    
     </StrictMode>
   );
 };

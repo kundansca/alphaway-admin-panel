@@ -6,7 +6,6 @@ import BookingModal from "./bookingModal";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-
 function Bookings() {
   const perPage = 10;
   const [allBookings, setAllBookings] = useState([]);
@@ -20,35 +19,29 @@ function Bookings() {
   const [selectAll, setSelectAll] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedViewer, setSelectedViewer] = useState(null);
-   let authData=useSelector((state)=>{
-    
-      return state.auth;
-
-  })
+  let authData = useSelector((state) => {
+    return state.auth;
+  });
   const BASEURL = import.meta.env.VITE_APP_BASE_API_URL;
- 
-  
+
   useEffect(() => {
     const fetchBookings = async () => {
       setLoading(true);
-      try{
-          
-      const response = await axios.get(
-        `${BASEURL}/booking/forms`,
-   
-        {
-          headers: {
-            Authorization: `Bearer ${authData.userData.accessToken}`,
-          },
-        }
-      );
-  
-       
+      try {
+        const response = await axios.get(
+          `${BASEURL}/booking/forms`,
+
+          {
+            headers: {
+              Authorization: `Bearer ${authData.userData.accessToken}`,
+            },
+          }
+        );
+
         const data = response.data.content;
         setAllBookings(data);
         setFilteredData(data);
       } catch (error) {
-      
       } finally {
         setLoading(false);
       }
@@ -56,7 +49,6 @@ function Bookings() {
 
     fetchBookings();
   }, []);
-
 
   // ✅ Update viewers on page change
   useEffect(() => {
@@ -69,15 +61,16 @@ function Bookings() {
   // ✅ Search handler
   const handleSearch = () => {
     const s = searchVal.toLowerCase();
-    const result = allBookings.filter((b) =>
-      b.firstName?.toLowerCase().includes(s) ||
-      b.lastName?.toLowerCase().includes(s) ||
-      b.email?.toLowerCase().includes(s) ||
-      b.phone?.toLowerCase().includes(s) ||
-      b.university?.name?.toLowerCase().includes(s) ||
-      b.property?.name?.toLowerCase().includes(s) ||
-      b.gender?.name?.toLowerCase().includes(s) ||
-      b.nationality?.toLowerCase().includes(s)
+    const result = allBookings.filter(
+      (b) =>
+        b.firstName?.toLowerCase().includes(s) ||
+        b.lastName?.toLowerCase().includes(s) ||
+        b.email?.toLowerCase().includes(s) ||
+        b.phone?.toLowerCase().includes(s) ||
+        b.university?.name?.toLowerCase().includes(s) ||
+        b.property?.name?.toLowerCase().includes(s) ||
+        b.gender?.name?.toLowerCase().includes(s) ||
+        b.nationality?.toLowerCase().includes(s)
     );
     setFilteredData(result);
     setCurrentPage(1);
@@ -86,9 +79,22 @@ function Bookings() {
   // ✅ Export selected/all bookings to CSV
   const handleExportCSV = () => {
     const headers = [
-      "ID", "First Name", "Last Name", "Email", "Phone", "DOB",
-      "Gender", "University", "Academic Year", "Year of Study",
-      "Nationality", "Religion", "Address", "City", "Country", "Property"
+      "ID",
+      "First Name",
+      "Last Name",
+      "Email",
+      "Phone",
+      "DOB",
+      "Gender",
+      "University",
+      "Academic Year",
+      "Year of Study",
+      "Nationality",
+      "Religion",
+      "Address",
+      "City",
+      "Country",
+      "Property",
     ];
 
     const data = selectedRows.length
@@ -111,7 +117,7 @@ function Bookings() {
       `${b.address1} ${b.address2}`,
       b.city,
       b.country,
-      b.property?.name
+      b.property?.name,
     ]);
 
     const csv = [headers, ...rows]
@@ -168,7 +174,10 @@ function Bookings() {
           </div>
 
           <div className="col-md-4 d-flex justify-content-end gap-1">
-            <button className="btn btn-outline-secondary" onClick={handleExportCSV}>
+            <button
+              className="btn btn-outline-secondary"
+              onClick={handleExportCSV}
+            >
               {selectedRows.length
                 ? `Export CSV (${selectedRows.length})`
                 : "Export CSV"}
@@ -226,7 +235,9 @@ function Bookings() {
                           />
                         </td>
                         <td>{(currentPage - 1) * perPage + i + 1}</td>
-                        <td>{b.firstName} {b.lastName}</td>
+                        <td>
+                          {b.firstName} {b.lastName}
+                        </td>
                         <td>{b.email}</td>
                         <td>{b.phone}</td>
                         <td>{b.gender?.name}</td>
@@ -249,7 +260,9 @@ function Bookings() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="11" className="text-center">No data</td>
+                      <td colSpan="11" className="text-center">
+                        No data
+                      </td>
                     </tr>
                   )}
                 </tbody>
