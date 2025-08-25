@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../../layout/Index";
 import Pagination from "../../shared/Pagination";
 import { AddIcon, SearchIcon } from "../../../config/Icons";
-import BookingModal from "./bookingModal";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -18,8 +17,6 @@ function Bookings() {
   const [searchVal, setSearchVal] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedViewer, setSelectedViewer] = useState(null);
   let authData = useSelector((state) => {
     return state.auth;
   });
@@ -291,22 +288,14 @@ function Bookings() {
                         </td>
                         <td>{(currentPage - 1) * perPage + i + 1}</td>
                         <td>
-                          {b.firstName} {b.lastName}
+                          {b.firstName}
+                          {b.lastName}
                         </td>
                         <td>{b.email || "N/A"}</td>
                         <td>{b.country || "N/A"}</td>
                         <td>{b.city || "N/A"}</td>
                         <td>{b.property?.name || "N/A"}</td>
                         <td>
-                          {/* <button
-                            className="btn btn-sm btn-outline-primary"
-                            onClick={() => {
-                              setSelectedViewer(b);
-                              setShowModal(true);
-                            }}
-                          >
-                            View
-                          </button> */}
                           <td>
                             <Link
                               className="btn btn-sm btn-outline-success"
@@ -339,14 +328,6 @@ function Bookings() {
             />
           </>
         )}
-
-        {/* ✅ Modal */}
-        <BookingModal
-          show={showModal}
-          handleClose={() => setShowModal(false)}
-          booking={selectedViewer}
-          mode={selectedViewer ? "view" : "add"}
-        />
       </div>
     </Layout>
   );
