@@ -4,12 +4,14 @@ import Layout from "../../../layout/Index";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 
-const BookingViewingDetails = () => {
-  const [viewingData, setViewingData] = useState(null);
+const PartnerStudentDetails = () => {
+  const [studentData, setStudentData] = useState(null);
   const authData = useSelector((state) => state.auth);
   const { id } = useParams();
   const printRef = useRef();
   const BASEURL = import.meta.env.VITE_APP_BASE_API_URL;
+
+  // ✅ Date format function
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
@@ -22,11 +24,23 @@ const BookingViewingDetails = () => {
       hour12: true,
     });
   };
-  // ✅ Function to show value or N/A
+
+  const formatDateOnly = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return date.toLocaleDateString(undefined, {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
+  };
+  // ✅ Value check function
   const showValue = (value) => {
     if (value === null || value === undefined || value === "") return "N/A";
     return value;
   };
+
+  // ✅ Print function
   const handlePrint = () => {
     if (!printRef.current) return;
     const printWindow = window.open("", "", "width=900,height=650");
@@ -51,25 +65,28 @@ const BookingViewingDetails = () => {
     printDoc.close();
     printWindow.focus();
     printWindow.print();
-    // optional: auto close after printing
     printWindow.close();
   };
+
+  // ✅ API Call
   useEffect(() => {
-    const fetchViewingData = async () => {
+    const fetchStudentData = async () => {
       try {
-        const res = await axios.get(`${BASEURL}/book/viewing/${id}`, {
+        const res = await axios.get(`${BASEURL}/partner/student-info/${id}`, {
           headers: {
             Authorization: `Bearer ${authData.userData.accessToken}`,
           },
         });
-
-        setViewingData(res.data);
-      } catch (err) {}
+        console.log(res.data);
+        setStudentData(res.data);
+      } catch (err) {
+        console.error("Error fetching student details:", err);
+      }
     };
-    fetchViewingData();
+    fetchStudentData();
   }, [id, authData?.userData?.accessToken]);
 
-  if (!viewingData) {
+  if (!studentData) {
     return <div className="container mt-5">Loading...</div>;
   }
 
@@ -97,40 +114,35 @@ const BookingViewingDetails = () => {
   return (
     <Layout>
       <div className="container mt-4" ref={printRef}>
-        <h2 className="mb-4">Viewing Booking Details</h2>
+        <h2 className="mb-4">Partner Student Details</h2>
         <button className="btn btn-primary mb-3" onClick={handlePrint}>
           Print Form
         </button>
-        {renderSection("Viewer Information", [
-          { label: "First Name", value: viewingData?.firstName },
-          { label: "Last Name", value: viewingData?.lastName },
-          { label: "Email", value: viewingData?.email },
-          { label: "Phone", value: viewingData?.phone },
-          { label: "Viewer Name", value: viewingData?.viewerName },
+
+        {renderSection("Personal Information", [
+          { label: "Name", value: studentData?.name },
+          { label: "Email", value: studentData?.email },
+          { label: "Phone", value: studentData?.phone },
+          { label: "Date of Birth", value: formatDateOnly(studentData?.dob) },
+          { label: "Nationality", value: studentData?.nationality },
         ])}
 
-        {renderSection("Property Information", [
-          { label: "Property ID", value: viewingData?.property?.id },
-          { label: "Property Name", value: viewingData?.property?.name },
+        {renderSection("Education & Preference", [
+          { label: "University", value: studentData?.university },
+          { label: "Campus", value: studentData?.campus },
+          { label: "City", value: studentData?.city },
+          { label: "Budget", value: studentData?.budget },
+          { label: "Room Preference", value: studentData?.roomPreference },
+          { label: "Partner ID", value: studentData?.partnerId },
         ])}
 
-        {renderSection("Room Information", [
-          { label: "Room ID", value: viewingData?.room?.id || "Not Assigned" },
-        ])}
-
-        {renderSection("Viewing Schedule", [
-          {
-            label: "Viewing Date & Time",
-            value: formatDate(viewingData?.viewingDateTime),
-          },
-        ])}
         {renderSection("System Info", [
-          { label: "ID", value: viewingData?.id },
-          { label: "Create Date", value: formatDate(viewingData?.createDate) },
+          { label: "ID", value: studentData?.id },
+          { label: "Created Date", value: formatDate(studentData?.createDate) },
         ])}
       </div>
     </Layout>
   );
 };
 
-export default BookingViewingDetails;
+export default PartnerStudentDetails;

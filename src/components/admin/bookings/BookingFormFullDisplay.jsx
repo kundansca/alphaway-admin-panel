@@ -35,9 +35,7 @@ const BookingFormFullDisplay = () => {
         });
 
         setFormData(res.data);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      }
+      } catch (err) {}
     };
     fetchBookingForm();
   }, [id, authData?.userData?.accessToken]);
