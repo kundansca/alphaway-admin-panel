@@ -187,7 +187,7 @@ function EnquiryList() {
                         onChange={handleSelectAll}
                       />
                     </th>
-                    <th>#</th>
+                    <th>S.No.</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
@@ -213,7 +213,7 @@ function EnquiryList() {
                         </td>
                         <td>{b.email || "N/A"}</td>
                         <td>{b.phone || "N/A"}</td>
-                        <td>{b.enquiryChannel || "N/A"}</td>
+                        <td>{b.enquiryChannel?.description || "N/A"}</td>
                         <td>{formatDate(b.createDate)}</td>
 
                         <td>

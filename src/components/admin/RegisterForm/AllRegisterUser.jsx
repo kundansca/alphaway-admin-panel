@@ -100,7 +100,7 @@ function AllRegisterUser() {
         headers: { Authorization: `Bearer ${authData.userData.accessToken}` },
       });
       const users = response.data.content || [];
-     
+
       users.reverse();
       setFilteredData(users);
       setOriginalData(users);
@@ -156,12 +156,12 @@ function AllRegisterUser() {
   };
 
   const Toast = Swal.mixin({
-  toast: true,
-  position: "top-right",   // ya "bottom-end"
-  showConfirmButton: false,
-  timer: 6000,
-  timerProgressBar: true,
-});
+    toast: true,
+    position: "top-right", // ya "bottom-end"
+    showConfirmButton: false,
+    timer: 6000,
+    timerProgressBar: true,
+  });
   const handleSaveEdit = async () => {
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
@@ -174,41 +174,39 @@ function AllRegisterUser() {
       const payload = {
         name: editForm.name,
         email: editForm.email,
-       enabled:editForm.enabled
-        
+        enabled: editForm.enabled,
       };
       if (editForm.password) payload.password = editForm.password;
-        // console.log("edit payload",payload);
+      // console.log("edit payload",payload);
       const response = await axios.put(
         `${BASEURL}/user/${selectedUser.id}`,
         payload,
-        { headers: { Authorization: `Bearer ${authData.userData.accessToken}` } }
+        {
+          headers: { Authorization: `Bearer ${authData.userData.accessToken}` },
+        }
       );
-        
+
       const updatedUsers = originalData.map((u) =>
         u.id === selectedUser.id ? response.data : u
       );
- 
 
       setOriginalData(updatedUsers);
       setFilteredData(updatedUsers);
-    //   Swal.fire({
-    
-    //   title: "User updated successfully!",
-    //   confirmButtonText: "OK",
-    // });
-    Toast.fire({
-      icon: "success",
-      title: "User updated successfully!",
-    });
+      //   Swal.fire({
+
+      //   title: "User updated successfully!",
+      //   confirmButtonText: "OK",
+      // });
+      Toast.fire({
+        icon: "success",
+        title: "User updated successfully!",
+      });
       setShowModal(false);
     } catch (err) {
-        Toast.fire({
+      Toast.fire({
         icon: "error",
         title: "Failed to update user. Please try again.",
-    });
-
-  
+      });
     }
   };
 
@@ -267,7 +265,7 @@ function AllRegisterUser() {
                         onChange={handleSelectAll}
                       />
                     </th>
-                    <th>Sr. No</th>
+                    <th>S.No.</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
@@ -407,14 +405,12 @@ function AllRegisterUser() {
                       value={editForm.role}
                       disabled={true}
                       onChange={handleEditChange}
-                      
                     >
                       <option value="">Select Role</option>
                       <option value="ADMIN">Admin</option>
                       <option value="SALE">Sale</option>
                       <option value="MARKETER">Marketer</option>
                       <option value="OPERATOR">Operator</option>
-                      
                     </Form.Select>
                     {formErrors.role && (
                       <small className="text-danger">{formErrors.role}</small>
@@ -427,7 +423,6 @@ function AllRegisterUser() {
                     <Form.Select
                       name="enabled"
                       value={editForm.enabled}
-                    
                       onChange={(e) =>
                         setEditForm({
                           ...editForm,

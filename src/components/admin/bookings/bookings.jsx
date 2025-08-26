@@ -263,7 +263,7 @@ function Bookings() {
                         onChange={handleSelectAll}
                       />
                     </th>
-                    <th>#</th>
+                    <th>S.No.</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Country</th>

@@ -108,7 +108,10 @@ const EnquiryDetails = () => {
             { label: "Phone", value: enquiryData?.phone },
             { label: "Message", value: enquiryData?.message },
             { label: "Property", value: enquiryData?.property?.name },
-            { label: "Enquiry Channel", value: enquiryData?.enquiryChannel },
+            {
+              label: "Enquiry Channel",
+              value: enquiryData?.enquiryChannel?.description,
+            },
           ])}
 
           {renderSection("System Info", [
