@@ -3,6 +3,7 @@ import axios from "axios";
 import Layout from "../../../layout/Index";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { useReactToPrint } from "react-to-print";
 
 const BookingViewingDetails = () => {
   const [viewingData, setViewingData] = useState(null);
@@ -27,33 +28,20 @@ const BookingViewingDetails = () => {
     if (value === null || value === undefined || value === "") return "N/A";
     return value;
   };
-  const handlePrint = () => {
-    if (!printRef.current) return;
-    const printWindow = window.open("", "", "width=900,height=650");
-    const printDoc = printWindow.document;
-    const head = document.head.cloneNode(true);
-    const bodyContent = printRef.current.cloneNode(true);
 
-    printDoc.replaceChild(
-      printDoc.createElement("html"),
-      printDoc.documentElement
-    );
-
-    const html = printDoc.documentElement;
-    html.appendChild(head);
-
-    const body = printDoc.createElement("body");
-    body.className = document.body.className;
-    body.appendChild(bodyContent);
-
-    html.appendChild(body);
-
-    printDoc.close();
-    printWindow.focus();
-    printWindow.print();
-    // optional: auto close after printing
-    printWindow.close();
-  };
+  const handlePrint = useReactToPrint({
+    contentRef: printRef,
+    documentTitle: "Viewing Booking Details",
+    pageStyle: `
+       @page {
+         size: auto;
+         margin: 20mm;
+       }
+       body {
+         font-family: Arial, sans-serif;
+       }
+     `,
+  });
   useEffect(() => {
     const fetchViewingData = async () => {
       try {
@@ -96,38 +84,50 @@ const BookingViewingDetails = () => {
 
   return (
     <Layout>
-      <div className="container mt-4" ref={printRef}>
-        <h2 className="mb-4">Viewing Booking Details</h2>
-        <button className="btn btn-primary mb-3" onClick={handlePrint}>
-          Print Form
-        </button>
-        {renderSection("Viewer Information", [
-          { label: "First Name", value: viewingData?.firstName },
-          { label: "Last Name", value: viewingData?.lastName },
-          { label: "Email", value: viewingData?.email },
-          { label: "Phone", value: viewingData?.phone },
-          { label: "Viewer Name", value: viewingData?.viewerName },
-        ])}
+      <div className="container mt-4">
+        <div ref={printRef}>
+          <h2 className="mb-4">Viewing Booking Details</h2>
+          <button
+            className="btn btn-primary mb-3 no-print"
+            onClick={handlePrint}
+          >
+            Print Form
+          </button>
 
-        {renderSection("Property Information", [
-          { label: "Property ID", value: viewingData?.property?.id },
-          { label: "Property Name", value: viewingData?.property?.name },
-        ])}
+          {renderSection("Viewer Information", [
+            { label: "First Name", value: viewingData?.firstName },
+            { label: "Last Name", value: viewingData?.lastName },
+            { label: "Email", value: viewingData?.email },
+            { label: "Phone", value: viewingData?.phone },
+            { label: "Viewer Name", value: viewingData?.viewerName },
+          ])}
 
-        {renderSection("Room Information", [
-          { label: "Room ID", value: viewingData?.room?.id || "Not Assigned" },
-        ])}
+          {renderSection("Property Information", [
+            { label: "Property ID", value: viewingData?.property?.id },
+            { label: "Property Name", value: viewingData?.property?.name },
+          ])}
 
-        {renderSection("Viewing Schedule", [
-          {
-            label: "Viewing Date & Time",
-            value: formatDate(viewingData?.viewingDateTime),
-          },
-        ])}
-        {renderSection("System Info", [
-          { label: "ID", value: viewingData?.id },
-          { label: "Create Date", value: formatDate(viewingData?.createDate) },
-        ])}
+          {renderSection("Room Information", [
+            {
+              label: "Room ID",
+              value: viewingData?.room?.id || "Not Assigned",
+            },
+          ])}
+
+          {renderSection("Viewing Schedule", [
+            {
+              label: "Viewing Date & Time",
+              value: formatDate(viewingData?.viewingDateTime),
+            },
+          ])}
+          {renderSection("System Info", [
+            { label: "ID", value: viewingData?.id },
+            {
+              label: "Create Date",
+              value: formatDate(viewingData?.createDate),
+            },
+          ])}
+        </div>
       </div>
     </Layout>
   );

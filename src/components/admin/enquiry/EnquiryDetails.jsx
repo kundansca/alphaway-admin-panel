@@ -3,6 +3,8 @@ import axios from "axios";
 import Layout from "../../../layout/Index";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { useReactToPrint } from "react-to-print";
+import "./EnquiryDetails.css";
 
 const EnquiryDetails = () => {
   const [enquiryData, setEnquiryData] = useState(null);
@@ -31,33 +33,19 @@ const EnquiryDetails = () => {
     return value;
   };
 
-  // ✅ Print function
-  const handlePrint = () => {
-    if (!printRef.current) return;
-    const printWindow = window.open("", "", "width=900,height=650");
-    const printDoc = printWindow.document;
-    const head = document.head.cloneNode(true);
-    const bodyContent = printRef.current.cloneNode(true);
-
-    printDoc.replaceChild(
-      printDoc.createElement("html"),
-      printDoc.documentElement
-    );
-
-    const html = printDoc.documentElement;
-    html.appendChild(head);
-
-    const body = printDoc.createElement("body");
-    body.className = document.body.className;
-    body.appendChild(bodyContent);
-
-    html.appendChild(body);
-
-    printDoc.close();
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
-  };
+  const handlePrint = useReactToPrint({
+    contentRef: printRef,
+    documentTitle: "Enquiry_Details",
+    pageStyle: `
+      @page {
+        size: auto;
+        margin: 20mm;
+      }
+      body {
+        font-family: Arial, sans-serif;
+      }
+    `,
+  });
 
   // ✅ API Call
   useEffect(() => {
@@ -69,7 +57,9 @@ const EnquiryDetails = () => {
           },
         });
         setEnquiryData(res.data);
-      } catch (err) {}
+      } catch (err) {
+        console.error("Error fetching enquiry data", err);
+      }
     };
     fetchEnquiryData();
   }, [id, authData?.userData?.accessToken]);
@@ -101,29 +91,34 @@ const EnquiryDetails = () => {
 
   return (
     <Layout>
-      <div className="container mt-4" ref={printRef}>
-        <h2 className="mb-4">Enquiry Details</h2>
-        <button className="btn btn-primary mb-3" onClick={handlePrint}>
-          Print Form
-        </button>
+      <div className="container mt-4">
+        <div ref={printRef}>
+          <h2 className="mb-4">Enquiry Details</h2>
+          <button
+            className="btn btn-primary mb-3 no-print"
+            onClick={handlePrint}
+          >
+            Print Form
+          </button>
 
-        {renderSection("Enquiry Information", [
-          { label: "First Name", value: enquiryData?.firstName },
-          { label: "Last Name", value: enquiryData?.lastName },
-          { label: "Email", value: enquiryData?.email },
-          { label: "Phone", value: enquiryData?.phone },
-          { label: "Message", value: enquiryData?.message },
-          { label: "Property", value: enquiryData?.property?.name }, // null ho to N/A dikhega
-          { label: "Enquiry Channel", value: enquiryData?.enquiryChannel },
-        ])}
+          {renderSection("Enquiry Information", [
+            { label: "First Name", value: enquiryData?.firstName },
+            { label: "Last Name", value: enquiryData?.lastName },
+            { label: "Email", value: enquiryData?.email },
+            { label: "Phone", value: enquiryData?.phone },
+            { label: "Message", value: enquiryData?.message },
+            { label: "Property", value: enquiryData?.property?.name },
+            { label: "Enquiry Channel", value: enquiryData?.enquiryChannel },
+          ])}
 
-        {renderSection("System Info", [
-          { label: "ID", value: enquiryData?.id },
-          {
-            label: "Created Date & Time",
-            value: formatDate(enquiryData?.createDate),
-          },
-        ])}
+          {renderSection("System Info", [
+            { label: "ID", value: enquiryData?.id },
+            {
+              label: "Created Date & Time",
+              value: formatDate(enquiryData?.createDate),
+            },
+          ])}
+        </div>
       </div>
     </Layout>
   );
