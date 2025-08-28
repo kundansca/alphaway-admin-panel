@@ -42,7 +42,7 @@ const PartnerStudentDetails = () => {
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
-    documentTitle: "Partner Student Details",
+    documentTitle: "Partner From Details",
     pageStyle: `
        @page {
          size: auto;
@@ -100,7 +100,7 @@ const PartnerStudentDetails = () => {
     <Layout>
       <div className="container mt-4">
         <div ref={printRef}>
-          <h2 className="mb-4">Partner Student Details</h2>
+          <h2 className="mb-4">Partner From Details</h2>
           <button
             className="btn btn-primary mb-3 no-print"
             onClick={handlePrint}

@@ -56,7 +56,7 @@ const Login = () => {
       setLoading(true);
       await dispatch(loginAdmin({ email: username, password })).unwrap();
 
-      navigate("/admin/bookaviewing");
+      navigate("/admin/enquiry");
     } catch (err) {
       setError(err);
     } finally {

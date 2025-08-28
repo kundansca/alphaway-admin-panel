@@ -103,7 +103,7 @@ function PartnerList() {
     link.href = URL.createObjectURL(blob);
     link.download = selectedRows.length
       ? `partners_selected_${selectedRows.length}.csv`
-      : "partner_list.csv";
+      : "Partner-Form.csv";
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -131,7 +131,7 @@ function PartnerList() {
         },
       });
       const serverData = response.data.content || [];
-
+      console.log(serverData);
       setFilteredData(serverData);
       setOriginalData(serverData);
     } catch (error) {
@@ -150,7 +150,7 @@ function PartnerList() {
       <div className="container-fluid col-12 py-4">
         <div className="row">
           <div className="col-10">
-            <h1 className="mt-4">Partner List</h1>
+            <h1 className="mt-4">Partner Form</h1>
           </div>
           <div className="col-8 d-flex gap-2">
             <input

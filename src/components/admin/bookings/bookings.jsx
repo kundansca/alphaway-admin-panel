@@ -184,7 +184,7 @@ function Bookings() {
     link.href = URL.createObjectURL(blob);
     link.download = selectedRows.length
       ? `bookings_selected_${selectedRows.length}.csv`
-      : "bookings.csv";
+      : "Booking-Form.csv";
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -212,7 +212,7 @@ function Bookings() {
       <div className="container-fluid col-12 py-4">
         <div className="row">
           <div className="col-10">
-            <h1 className="mt-4">Booking List</h1>
+            <h1 className="mt-4">Booking Form</h1>
           </div>
 
           <div className="col-8 d-flex gap-2">

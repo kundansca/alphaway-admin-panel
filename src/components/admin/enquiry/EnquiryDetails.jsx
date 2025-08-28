@@ -35,7 +35,7 @@ const EnquiryDetails = () => {
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
-    documentTitle: "Enquiry_Details",
+    documentTitle: "Enquiry Form Details",
     pageStyle: `
       @page {
         size: auto;
@@ -93,7 +93,7 @@ const EnquiryDetails = () => {
     <Layout>
       <div className="container mt-4">
         <div ref={printRef}>
-          <h2 className="mb-4">Enquiry Details</h2>
+          <h2 className="mb-4">Enquiry Form Details</h2>
           <button
             className="btn btn-primary mb-3 no-print"
             onClick={handlePrint}

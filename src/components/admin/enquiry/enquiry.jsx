@@ -86,7 +86,7 @@ function EnquiryList() {
     link.href = URL.createObjectURL(blob);
     link.download = selectedRows.length
       ? `enquiry_selected_List${selectedRows.length}.csv`
-      : "enquiry_List.csv";
+      : "Enquiry-Form.csv";
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -140,7 +140,7 @@ function EnquiryList() {
       <div className="container-fluid col-12 py-4">
         <div className="row">
           <div className="col-10">
-            <h1 className="mt-4">Enquiry List</h1>
+            <h1 className="mt-4">Enquiry Form</h1>
           </div>
           <div className="col-8 d-flex gap-2">
             <input

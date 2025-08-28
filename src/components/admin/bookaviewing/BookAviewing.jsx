@@ -127,7 +127,7 @@ function BookAViewing() {
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.setAttribute("download", "book_a_viewing_list.csv");
+    link.setAttribute("download", "Viewing-Form.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -138,7 +138,7 @@ function BookAViewing() {
       <div className="container-fluid col-12">
         <div className="row">
           <div className="col-10">
-            <h1 className="mt-4">Book A Viewing List</h1>
+            <h1 className="mt-4">Viewing Form</h1>
           </div>
           <div className="col-6">
             <input

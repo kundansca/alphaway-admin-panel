@@ -31,7 +31,7 @@ const BookingViewingDetails = () => {
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
-    documentTitle: "Viewing Booking Details",
+    documentTitle: "Viewing From Details",
     pageStyle: `
        @page {
          size: auto;
@@ -86,7 +86,7 @@ const BookingViewingDetails = () => {
     <Layout>
       <div className="container mt-4">
         <div ref={printRef}>
-          <h2 className="mb-4">Viewing Booking Details</h2>
+          <h2 className="mb-4">Viewing From Details</h2>
           <button
             className="btn btn-primary mb-3 no-print"
             onClick={handlePrint}

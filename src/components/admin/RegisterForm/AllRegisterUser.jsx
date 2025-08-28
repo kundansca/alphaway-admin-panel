@@ -74,7 +74,7 @@ function AllRegisterUser() {
     link.href = URL.createObjectURL(blob);
     link.download = selectedRows.length
       ? `users_selected_${selectedRows.length}.csv`
-      : "users_list.csv";
+      : "Users.csv";
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -223,7 +223,7 @@ function AllRegisterUser() {
       <div className="container-fluid py-4">
         <div className="row mb-3">
           <div className="col-6">
-            <h1>All Registered Users</h1>
+            <h1>Users</h1>
           </div>
           <div className="col-6 d-flex gap-2">
             <input

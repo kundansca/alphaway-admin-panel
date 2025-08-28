@@ -3,46 +3,48 @@ export const sidebarNavigation = [
     type: "header",
     text: "Core",
   },
+
   {
-    name: "Book A Viewing List",
-    path: "/admin/bookaviewing",
-    icon: "ri-calendar-check-line",
+    name: "Enquiry Form",
+    path: "/admin/enquiry",
+    icon: "ri-questionnaire-line",
   },
   {
-    name: "Bookings List",
+    name: "Booking Form",
     path: "/admin/bookings",
     icon: "ri-book-open-line",
   },
   {
-    name: "Enquiry List",
-    path: "/admin/enquiry",
-    icon: "ri-questionnaire-line",
+    name: "Viewing Form",
+    path: "/admin/bookaviewing",
+    icon: "ri-calendar-check-line",
   },
+
   // {
   //   name: "Students List",
   //   path: "/admin/students",
   //   icon: "ri-team-line"
   // },
   {
-  name: "Partner List",
-  path: "/admin/partners",
-  icon: "ri-building-line", // Represents partnership/business
-},
- {
-  name: "Email Sender",
-  path: "/email",
-  icon: "ri-mail-send-line menu-icon", // Represents partnership/business
-},
-{
-  name: "Add User",
-  path: "/add-user",
-  icon: "ri-user-add-line", // Represents partnership/business
-},
-{
-  name: "Registered Users",
-  path: "/registered-users",
-  icon: "ri-group-line", // Represents partnership/business
-},
+    name: "Partner Form",
+    path: "/admin/partners",
+    icon: "ri-building-line", // Represents partnership/business
+  },
+  {
+    name: "Email Sender",
+    path: "/email",
+    icon: "ri-mail-send-line menu-icon", // Represents partnership/business
+  },
+  {
+    name: "Add User",
+    path: "/add-user",
+    icon: "ri-user-add-line", // Represents partnership/business
+  },
+  {
+    name: "Users",
+    path: "/registered-users",
+    icon: "ri-group-line", // Represents partnership/business
+  },
   // {
   //   name: "Customers",
   //   path: "/admin/customers",

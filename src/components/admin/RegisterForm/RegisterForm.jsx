@@ -19,7 +19,6 @@ const RegisterForm = () => {
   const BASEURL = import.meta.env.VITE_APP_BASE_API_URL;
   const [showPassword, setShowPassword] = useState(false);
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -67,7 +66,7 @@ const RegisterForm = () => {
     return newErrors;
   };
 
-    const Toast = Swal.mixin({
+  const Toast = Swal.mixin({
     toast: true,
     position: "top-end",
     showConfirmButton: false,
@@ -94,17 +93,17 @@ const RegisterForm = () => {
         role: formData.role,
       };
 
-       await axios.post(`${BASEURL}/add-user`, payload, {
+      await axios.post(`${BASEURL}/add-user`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authData.userData.accessToken}`,
         },
       });
 
-       Toast.fire({
-      icon: "success",
-      title: "Registration successful!",
-       });
+      Toast.fire({
+        icon: "success",
+        title: "User added successfully!",
+      });
 
       // reset form
       setFormData({
@@ -116,20 +115,19 @@ const RegisterForm = () => {
       });
       setErrors({});
     } catch (error) {
-
       if (
         error.response &&
         (error.response.status === 400 || error.response.status === 409)
       ) {
         Toast.fire({
-        icon: "error",
-        title: error?.response?.data?.errors[0] || "Email already exists!",
-         });
+          icon: "error",
+          title: error?.response?.data?.errors[0] || "Email already exists!",
+        });
       } else {
-         Toast.fire({
-        icon: "error",
-        title: "Something went wrong. Please try again.",
-      });
+        Toast.fire({
+          icon: "error",
+          title: "Something went wrong. Please try again.",
+        });
       }
     } finally {
       setLoading(false);
@@ -142,7 +140,7 @@ const RegisterForm = () => {
         <div className="row justify-content-center">
           <div className="col-md-6">
             <div className="card shadow-lg p-4 rounded-4 border-0">
-              <h3 className="text-center mb-4 fw-bold">Registration</h3>
+              <h3 className="text-center mb-4 fw-bold">Add User</h3>
 
               <form onSubmit={handleSubmit}>
                 {/* Full Name */}
@@ -191,7 +189,6 @@ const RegisterForm = () => {
                     <option value="SALE">Sale</option>
                     <option value="MARKETER">Marketer</option>
                     <option value="OPERATOR">Operator</option>
-                   
                   </select>
                   {errors.role && (
                     <small className="text-danger">{errors.role}</small>
@@ -209,19 +206,20 @@ const RegisterForm = () => {
                     value={formData.password}
                     onChange={handleChange}
                   />
-                  {formData.password!=="" && <span
-                    className="position-absolute end-0 translate-middle-y me-3"
-                    style={{ cursor: "pointer" ,top:"50px"}}
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    <i
-                      className={`bi ${
-                        showPassword ? "bi-eye-slash" : "bi-eye"
-                      }`}
-                    ></i>
-                  </span>
-                 }
-                  
+                  {formData.password !== "" && (
+                    <span
+                      className="position-absolute end-0 translate-middle-y me-3"
+                      style={{ cursor: "pointer", top: "50px" }}
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      <i
+                        className={`bi ${
+                          showPassword ? "bi-eye-slash" : "bi-eye"
+                        }`}
+                      ></i>
+                    </span>
+                  )}
+
                   {errors.password && (
                     <small className="text-danger">{errors.password}</small>
                   )}
@@ -259,10 +257,10 @@ const RegisterForm = () => {
                       >
                         <span className="visually-hidden">Loading...</span>
                       </div>
-                      Registering...
+                      Saving user…
                     </>
                   ) : (
-                    "Register"
+                    "Add User"
                   )}
                 </button>
               </form>
