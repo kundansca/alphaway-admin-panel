@@ -21,6 +21,7 @@
     "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
     "install": "^0.13.0",
+    "jodit-react": "^5.2.19",
     "npm": "^11.5.2",
     "papaparse": "^5.5.3",
     "react": "^18.0.0",

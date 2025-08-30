@@ -1,13 +1,49 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef } from "react";
 import Papa from "papaparse";
-import JoditEditor from "jodit-react";
+import ReactQuill, { Quill } from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import Layout from "../../../layout/Index";
 import axios from "axios";
 import "./EmailSender.css";
 import { useSelector } from "react-redux";
 import DOMPurify from "dompurify";
 import Swal from "sweetalert2";
-import "./EmailSender.css";
+
+const SizeStyle = Quill.import("attributors/style/size");
+SizeStyle.whitelist = ["small", "normal", "large", "huge"];
+Quill.register(SizeStyle, true);
+
+// Custom Color Picker Component
+const CustomColorPicker = ({ label, onChange, defaultValue }) => {
+  const [color, setColor] = useState(defaultValue || "#000000");
+
+  return (
+    <div className="color-picker-container">
+      <span className="color-picker-label">{label}</span>
+      <div className="color-picker-wrapper">
+        <input
+          type="color"
+          value={color}
+          onChange={(e) => {
+            setColor(e.target.value);
+            onChange(e.target.value);
+          }}
+          className="color-picker-input"
+        />
+        <input
+          type="text"
+          value={color}
+          onChange={(e) => {
+            setColor(e.target.value);
+            onChange(e.target.value);
+          }}
+          className="color-text-input"
+          placeholder="#000000"
+        />
+      </div>
+    </div>
+  );
+};
 
 const EmailSender = () => {
   const [csvData, setCsvData] = useState([]);
@@ -16,6 +52,7 @@ const EmailSender = () => {
   const [message, setMessage] = useState("");
   const [preview, setPreview] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showAllRecipients, setShowAllRecipients] = useState(false);
   const [testEmail, setTestEmail] = useState("");
   const [testLoading, setTestLoading] = useState(false);
   const [testPassed, setTestPassed] = useState(false);
@@ -26,7 +63,7 @@ const EmailSender = () => {
   const [redirectUrl, setRedirectUrl] = useState("");
   const [textColor, setTextColor] = useState("#000000");
   const [backgroundColor, setBackgroundColor] = useState("#ffffff");
-  const editorRef = useRef(null);
+  const quillRef = useRef(null);
   const [testName, setTestName] = useState("");
   const fileInputRef = useRef(null);
   const authData = useSelector((state) => state.auth);
@@ -40,10 +77,13 @@ const EmailSender = () => {
     timerProgressBar: true,
   });
 
+  // Email validation
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
+  // CSV Upload
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
+
     if (file) {
       Papa.parse(file, {
         header: true,
@@ -52,50 +92,57 @@ const EmailSender = () => {
       });
       setCsvFile(file);
       setPreview(false);
-      setTestPassed(false);
+      testPassed(false);
     }
   };
 
+  // Apply text color
   const applyTextColor = (color) => {
-    if (editorRef.current) {
-      editorRef.current.current?.editor?.execCommand("foreColor", false, color);
-      setTextColor(color);
-    }
+    const quill = quillRef.current.getEditor();
+    quill.format("color", color);
+    setTextColor(color);
   };
 
+  // Apply background color
   const applyBackgroundColor = (color) => {
-    if (editorRef.current) {
-      editorRef.current.current?.editor?.execCommand(
-        "hiliteColor",
-        false,
-        color
-      );
-      setBackgroundColor(color);
-    }
+    const quill = quillRef.current.getEditor();
+    quill.format("background", color);
+    setBackgroundColor(color);
   };
 
+  // Insert Image from Modal
   const handleInsertImage = () => {
     if (!imageUrl.trim()) return;
-    const editor = editorRef.current.editor;
+    const quill = quillRef.current.getEditor();
+    const range = quill.getSelection(true);
+
     if (redirectUrl.trim()) {
-      editor.selection.insertHTML(
-        `<a href="${redirectUrl}" target="_blank"><img src="${imageUrl}" alt="image"/></a>`
+      quill.clipboard.dangerouslyPasteHTML(
+        range.index,
+        `<a href="${redirectUrl}" target="_blank"><img src="${imageUrl}" alt="image" /></a>`
       );
     } else {
-      editor.selection.insertImage(imageUrl);
+      quill.insertEmbed(range.index, "image", imageUrl, "user");
     }
     setShowImageModal(false);
     setImageUrl("");
     setRedirectUrl("");
   };
 
-  //   const sanitizeContent = (content) => {
-  //     return DOMPurify.sanitize(content, {
-  //       ALLOWED_TAGS: ["a", "img", "p", "br", "b", "i", "u", "span", "div"],
-  //       ALLOWED_ATTR: ["href", "src", "alt", "title", "style", "target"],
-  //     });
-  //   };
+  function sanitizeContent(content) {
+    // Step 1: Decode escaped characters (remove backslashes)
+    let unescaped = content.replace(/\\"/g, '"');
 
+    // Step 2: Sanitize so no XSS or unwanted tags go to server
+    let clean = DOMPurify.sanitize(unescaped, {
+      ALLOWED_TAGS: ["a", "img", "p", "br", "b", "i", "u", "span", "div"],
+      ALLOWED_ATTR: ["href", "src", "alt", "title", "style", "target"],
+    });
+
+    return clean;
+  }
+
+  // Send Bulk Email
   const handleSend = async () => {
     if (!csvFile) return alert("Upload CSV first!");
     setLoading(true);
@@ -103,7 +150,7 @@ const EmailSender = () => {
       const formData = new FormData();
       formData.append("subject", subject);
       formData.append("template", message);
-      formData.append("file", csvFile);
+      formData.append("file", csvFile); // attach the file
 
       const res = await axios.post(`${BASEURL}/email/send-bulk`, formData, {
         headers: {
@@ -113,7 +160,10 @@ const EmailSender = () => {
       });
 
       if (res.status === 200) {
-        Toast.fire({ icon: "success", title: "Emails sent successfully!" });
+        Toast.fire({
+          icon: "success",
+          title: "Emails sent successfully!",
+        });
         setCsvData([]);
         setCsvFile(null);
         setSubject("");
@@ -126,15 +176,22 @@ const EmailSender = () => {
         setBackgroundColor("#ffffff");
         if (fileInputRef.current) fileInputRef.current.value = "";
       } else {
-        Toast.fire({ icon: "error", title: "Error sending emails!" });
+        Toast.fire({
+          icon: "error",
+          title: "Error sending emails!",
+        });
       }
-    } catch {
-      Toast.fire({ icon: "error", title: "Server error!" });
+    } catch (err) {
+      Toast.fire({
+        icon: "error",
+        title: "Server error!",
+      });
     } finally {
       setLoading(false);
     }
   };
 
+  // Send Test Email
   const handleTestEmail = async () => {
     if (!validateEmail(testEmail)) {
       setTestError("Please enter a valid email address!");
@@ -143,9 +200,10 @@ const EmailSender = () => {
     setTestError("");
     setTestLoading(true);
     try {
+      let finalContent = sanitizeContent(message);
       const payload = {
         emailSubject: subject,
-        template: message,
+        template: finalContent,
         recipientEmail: testEmail,
         recipientName: testName,
       };
@@ -156,32 +214,31 @@ const EmailSender = () => {
           Authorization: `Bearer ${authData.userData.accessToken}`,
         },
       });
-
       if (res.status === 200) {
-        Toast.fire({ icon: "success", title: "Test email sent successfully!" });
+        Toast.fire({
+          icon: "success",
+          title: "Test email sent successfully!",
+        });
+
         setTestPassed(true);
         setShowTestModal(false);
         setTestEmail("");
         setTestName("");
       } else {
-        Toast.fire({ icon: "error", title: "Error sending test email!" });
+        Toast.fire({
+          icon: "error",
+          title: "Error sending test email!",
+        });
       }
-    } catch {
-      Toast.fire({ icon: "error", title: "Server error!" });
+    } catch (err) {
+      Toast.fire({
+        icon: "error",
+        title: "Server error!",
+      });
     } finally {
       setTestLoading(false);
     }
   };
-  const editorConfig = useMemo(
-    () => ({
-      readonly: false,
-      height: 350,
-      toolbarSticky: true,
-      toolbarStickyOffset: 50,
-      removeButtons: ["about"],
-    }),
-    []
-  );
 
   return (
     <Layout>
@@ -216,16 +273,79 @@ const EmailSender = () => {
           <div className="mb-3">
             <label className="form-label">Message</label>
 
-            <JoditEditor
-              ref={editorRef}
-              value={message}
-              tabIndex={1}
-              onBlur={(newContent) => setMessage(newContent)}
-              config={editorConfig}
-            />
+            {/* Color Pickers */}
+            <div className="d-flex gap-3 mb-2">
+              <CustomColorPicker
+                label="Text Color"
+                onChange={applyTextColor}
+                defaultValue={textColor}
+              />
+              <CustomColorPicker
+                label="Background Color"
+                onChange={applyBackgroundColor}
+                defaultValue={backgroundColor}
+              />
+            </div>
+
+            <div className="position-relative" style={{ minHeight: "180px" }}>
+              <ReactQuill
+                ref={quillRef}
+                theme="snow"
+                value={message}
+                onChange={setMessage}
+                style={{
+                  minHeight: "150px",
+                  maxHeight: "350px",
+                  overflow: "auto",
+                }}
+                modules={{
+                  toolbar: [
+                    [{ header: [1, 2, 3, false] }],
+                    [{ size: SizeStyle.whitelist }],
+                    [{ color: [] }, { background: [] }],
+                    ["bold", "italic", "underline", "strike"],
+                    [{ align: [] }],
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    ["link"],
+                    ["clean"],
+                  ],
+                }}
+                formats={[
+                  "header",
+                  "size",
+                  "color",
+                  "background",
+                  "bold",
+                  "italic",
+                  "underline",
+                  "strike",
+                  "align",
+                  "list",
+                  "bullet",
+                  "link",
+                  "image",
+                ]}
+              />
+
+              {/* Add Image Button */}
+              <div className="image-url-btn">
+                <button
+                  type="button"
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setShowImageModal(true)}
+                  title="Click to add image via URL"
+                >
+                  🖼
+                </button>
+              </div>
+            </div>
           </div>
 
-          {/* Action Buttons */}
+          {/* Buttons */}
           <div className="d-flex justify-content-between flex-wrap gap-2">
             <button
               className="btn btn-secondary"
@@ -271,31 +391,6 @@ const EmailSender = () => {
             </button>
           </div>
 
-          {/* Preview */}
-          {preview && (
-            <div className="mt-4 border p-3 rounded bg-light">
-              <h5>📌 Preview</h5>
-              <p>
-                <strong>Subject:</strong> {subject}
-              </p>
-              <p>
-                <strong>Message:</strong>
-              </p>
-              <div
-                dangerouslySetInnerHTML={{ __html: message }}
-                style={{
-                  maxHeight: "250px",
-                  overflowY: "auto",
-                  border: "1px solid #ddd",
-                  padding: "10px",
-                  borderRadius: "8px",
-                  background: "#fff",
-                }}
-              />
-            </div>
-          )}
-
-          {/* Modals */}
           {/* Image Modal */}
           {showImageModal && (
             <>
@@ -365,6 +460,7 @@ const EmailSender = () => {
                       ></button>
                     </div>
                     <div className="modal-body">
+                      {/* Name Input */}
                       <input
                         type="text"
                         className="form-control mb-2"
@@ -372,12 +468,13 @@ const EmailSender = () => {
                         value={testName}
                         onChange={(e) => setTestName(e.target.value)}
                       />
+
                       <input
                         type="email"
                         className={`form-control ${
                           testError ? "is-invalid" : ""
                         }`}
-                        placeholder="Enter test email"
+                        placeholder="Enter test email address"
                         value={testEmail}
                         onChange={(e) => {
                           setTestEmail(e.target.value);
@@ -413,6 +510,30 @@ const EmailSender = () => {
                 onClick={() => setShowTestModal(false)}
               ></div>
             </>
+          )}
+
+          {/* Preview Section */}
+          {preview && (
+            <div className="mt-4 border p-3 rounded bg-light">
+              <h5>📌 Preview</h5>
+              <p>
+                <strong>Subject:</strong> {subject}
+              </p>
+              <p>
+                <strong>Message:</strong>
+              </p>
+              <div
+                dangerouslySetInnerHTML={{ __html: message }}
+                style={{
+                  maxHeight: "250px",
+                  overflowY: "auto",
+                  border: "1px solid #ddd",
+                  padding: "10px",
+                  borderRadius: "8px",
+                  background: "#fff",
+                }}
+              />
+            </div>
           )}
         </div>
       </div>
