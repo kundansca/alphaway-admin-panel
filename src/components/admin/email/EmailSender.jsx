@@ -1,6 +1,6 @@
 import React, { useState, useRef, useMemo } from "react";
 import Papa from "papaparse";
-import JoditEditor from "jodit-react";
+import JoditEditor, { Jodit } from "jodit-react";
 import Layout from "../../../layout/Index";
 import axios from "axios";
 import "./EmailSender.css";
@@ -8,7 +8,6 @@ import { useSelector } from "react-redux";
 import DOMPurify from "dompurify";
 import Swal from "sweetalert2";
 import "./EmailSender.css";
-
 const EmailSender = () => {
   const [csvData, setCsvData] = useState([]);
   const [csvFile, setCsvFile] = useState();
@@ -172,6 +171,7 @@ const EmailSender = () => {
       setTestLoading(false);
     }
   };
+
   const editorConfig = useMemo(
     () => ({
       readonly: false,
@@ -179,6 +179,19 @@ const EmailSender = () => {
       toolbarSticky: true,
       toolbarStickyOffset: 50,
       removeButtons: ["about"],
+      controls: {
+        paragraph: {
+          list: {
+            p: "Normal",
+            h1: "Heading 1",
+            h2: "Heading 2",
+            h3: "Heading 3",
+            h4: "Heading 4",
+            h5: "Heading 5",
+            h6: "Heading 6",
+          },
+        },
+      },
     }),
     []
   );
