@@ -172,13 +172,58 @@ const EmailSender = () => {
     }
   };
 
+  Jodit.modules.Icon.set(
+    "textTransform",
+    `
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+    <text x="2" y="15" font-size="20" font-weight="bold">Aa</text>
+    <text x="14" y="15" font-size="20">⇅</text>
+  </svg>
+`
+  );
+
   const editorConfig = useMemo(
     () => ({
       readonly: false,
       height: 350,
       toolbarSticky: true,
       toolbarStickyOffset: 50,
-      removeButtons: ["about"],
+      removeButtons: ["about", "print"],
+      extraButtons: [
+        {
+          name: "textTransform",
+          tooltip: "Text Transform",
+          icon: "textTransform",
+          list: {
+            uppercase: "UPPERCASE",
+            lowercase: "lowercase",
+            capitalize: "Capitalize",
+          },
+          exec: (editor, _, options) => {
+            const sel = editor.s.sel;
+            if (!sel || sel.rangeCount === 0) return;
+            const key = options.control.args[0]; // yahan value milti hai
+
+            const range = sel.getRangeAt(0);
+            const text = range.toString();
+            if (!text) return;
+
+            let transformed;
+            if (key === "uppercase") transformed = text.toUpperCase();
+            else if (key === "lowercase") transformed = text.toLowerCase();
+            else if (key === "capitalize")
+              transformed = text.replace(/\b\w/g, (c) => c.toUpperCase());
+
+            editor.s.insertHTML(transformed);
+
+            return false; // important to stop default behavior & close dropdown
+          },
+          isChildActive: (editor, control) => {
+            // optionally mark active state if needed
+            return false;
+          },
+        },
+      ],
       controls: {
         paragraph: {
           list: {
