@@ -65,6 +65,7 @@ function PartnerList() {
   const handleExportCSV = () => {
     const headers = [
       "ID",
+      "Partner Name",
       "Name",
       "Email",
       "Phone",
@@ -82,6 +83,7 @@ function PartnerList() {
       : originalData;
     const rows = data.map((p) => [
       p.id,
+      p.partnerId,
       p.name,
       p.email,
       p.phone,
@@ -205,6 +207,7 @@ function PartnerList() {
                       />
                     </th>
                     <th>S.No.</th>
+                    <th>Partner Name</th>
                     <th>Name</th>
                     <th>Email</th>
 
@@ -227,7 +230,9 @@ function PartnerList() {
                           />
                         </td>
                         <td>{(currentPage - 1) * perPage + i + 1}</td>
+                        <td>{p.partnerId}</td>
                         <td>{p.name}</td>
+
                         <td>{p.email}</td>
                         <td>{p.nationality}</td>
                         <td>{p.city}</td>

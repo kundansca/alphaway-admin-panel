@@ -122,7 +122,7 @@ const PartnerStudentDetails = () => {
             { label: "City", value: studentData?.city },
             { label: "Budget", value: studentData?.budget },
             { label: "Room Preference", value: studentData?.roomPreference },
-            { label: "Partner ID", value: studentData?.partnerId },
+            { label: "Partner Name", value: studentData?.partnerId },
           ])}
 
           {renderSection("System Info", [
