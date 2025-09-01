@@ -286,7 +286,7 @@ const EmailSender = () => {
           {/* Action Buttons */}
           <div className="d-flex justify-content-between flex-wrap gap-2">
             <button
-              className="btn btn-secondary"
+              className="global-button"
               onClick={() => setPreview(!preview)}
               disabled={!csvData.length || !subject.trim() || !message.trim()}
             >
@@ -294,7 +294,7 @@ const EmailSender = () => {
             </button>
 
             <button
-              className="btn btn-warning"
+              className="global-button"
               onClick={() => setShowTestModal(true)}
               disabled={
                 !csvData.length ||
@@ -307,7 +307,7 @@ const EmailSender = () => {
             </button>
 
             <button
-              className="btn btn-primary"
+              className="global-button"
               onClick={handleSend}
               disabled={
                 loading ||
@@ -386,13 +386,13 @@ const EmailSender = () => {
                     </div>
                     <div className="modal-footer">
                       <button
-                        className="btn btn-secondary"
+                        className="global-button"
                         onClick={() => setShowImageModal(false)}
                       >
                         Cancel
                       </button>
                       <button
-                        className="btn btn-primary"
+                        className="global-button"
                         onClick={handleInsertImage}
                       >
                         Insert
@@ -448,13 +448,13 @@ const EmailSender = () => {
                     </div>
                     <div className="modal-footer">
                       <button
-                        className="btn btn-secondary"
+                        className="global-button"
                         onClick={() => setShowTestModal(false)}
                       >
                         Cancel
                       </button>
                       <button
-                        className="btn btn-warning"
+                        className="global-button"
                         onClick={handleTestEmail}
                         disabled={
                           testLoading || !testEmail.trim() || !testName.trim()

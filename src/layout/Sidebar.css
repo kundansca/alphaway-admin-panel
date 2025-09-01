@@ -1,6 +1,6 @@
 /* Sidebar Styles */
 .sidebar {
-  color: #5C5C5C;
+  color: #5c5c5c;
   overflow-x: hidden !important;
   position: fixed;
   left: 0;
@@ -11,32 +11,28 @@
   /* Default expanded width */
   transition: width 0.3s ease;
   z-index: 1000;
-  background-color: #FFFDFA;
+  background-color: #fffdfa;
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1);
 }
-
 
 .sidebar.collapsed {
   width: 80px;
   /* Collapsed width */
   overflow: visible !important;
   /* Allow popover submenus to be visible */
-
 }
 
 .sidebar::-webkit-scrollbar-thumb {
   border-radius: 4px;
 }
 
-
 .sidebar::-webkit-scrollbar {
   width: 6px;
-  background-color: #FFFDFA;
+  background-color: #fffdfa;
 }
 
 .sidebar.has-bg-image .image-wrapper {
   display: block;
-
 }
 
 .sidebar .sidebar-layout {
@@ -45,7 +41,7 @@
   flex-direction: column;
 
   position: relative;
-  background-color: #FFFDFA;
+  background-color: #fffdfa;
   z-index: 2;
 }
 
@@ -59,7 +55,7 @@
   /* padding: 0 25px; */
 }
 
-.sidebar .sidebar-layout .sidebar-header>span {
+.sidebar .sidebar-layout .sidebar-header > span {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -90,7 +86,7 @@
 }
 
 .main-layout .sidebar .menu .menu-header:hover {
-  color: #47B05A;
+  color: #dc3545;
 }
 
 /* Ensure menu header is always visible */
@@ -100,7 +96,6 @@
   padding: 10px 0;
   /* Adjust padding for centering */
   text-align: center;
-
 }
 
 /* Optional: shorten the text if needed, otherwise it will just overflow with ellipsis */
@@ -112,22 +107,20 @@
   text-overflow: ellipsis;
   /* Will show "C..." for "CORE" */
   white-space: nowrap;
-
 }
-
 
 .main-layout .sidebar .menu .menu-item a {
   display: flex;
   align-items: center;
   height: 50px;
   padding: 0 20px;
-  color: #5C5C5C;
+  color: #5c5c5c;
   text-decoration: none;
   transition: all 0.3s;
 }
 
 .main-layout .sidebar .menu .menu-item a:hover {
-  color: #47B05A;
+  color: #dc3545;
 }
 
 .main-layout .sidebar .menu .menu-item a .menu-icon {
@@ -165,12 +158,10 @@
 }
 
 .main-layout .sidebar .menu .menu-item a:hover .menu-title {
-  color: #47B05A;
+  color: #dc3545;
 }
 
-
 @keyframes swing {
-
   0%,
   30%,
   50%,
@@ -197,11 +188,10 @@
 }
 
 .main-layout .sidebar .menu .menu-item a:hover .menu-icon {
-  color: #47B05A;
+  color: #dc3545;
   /* transform: scale(1.1); */
   animation: swing ease-in-out 0.5s 1 alternate;
 }
-
 
 .main-layout .sidebar .menu .menu-item a:hover .menu-icon i {
   animation: swing ease-in-out 0.5s 1 alternate;
@@ -223,7 +213,7 @@
 }
 
 .sub-menu-list {
-  background-color: #FFFDFA;
+  background-color: #fffdfa;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -231,7 +221,8 @@
   overflow: hidden;
   opacity: 0;
   transform: translateY(-10px);
-  transition: max-height 0.3s ease-out, opacity 0.3s ease-out, transform 0.3s ease-out;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out,
+    transform 0.3s ease-out;
 }
 
 .sub-menu-list.open {
@@ -249,7 +240,7 @@
   margin-left: 10px;
   width: 220px;
   height: auto;
-  background-color: #FFFDFA;
+  background-color: #fffdfa;
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   padding: 10px 0;
@@ -264,7 +255,6 @@
   opacity: 1;
   visibility: visible;
   transform: translateX(0);
-
 }
 
 .sidebar.collapsed .sub-menu-list .menu-item,
@@ -274,7 +264,7 @@
   text-align: left;
   height: 36px;
   padding: 0 16px;
-  color: #5C5C5C;
+  color: #5c5c5c;
   font-size: 0.875rem;
   text-decoration: none;
   transition: all 0.2s;
@@ -282,11 +272,11 @@
 
 .sidebar.collapsed .sub-menu-list .menu-item a:hover {
   /* background-color: rgba(255, 255, 255, 0.1); */
-  color: #47B05A;
+  color: #dc3545;
 }
 
 /* Adjust menu items when sidebar is collapsed */
-.sidebar.collapsed .menu-item>a {
+.sidebar.collapsed .menu-item > a {
   justify-content: left;
   padding: 0 10px;
   width: 100%;
@@ -309,7 +299,7 @@
   top: 50%;
   transform: translateY(-50%);
   margin-left: 15px;
-  background: #FFFDFA;
+  background: #fffdfa;
   color: white;
   padding: 6px 12px;
   border-radius: 4px;
@@ -320,18 +310,18 @@
 }
 
 /* Active States */
-.menu-item.active>a {
+.menu-item.active > a {
   color: #404040 !important;
   background-color: #f4f5f9;
-  border-left: 5px solid #F2A634;
+  border-left: 5px solid#DC3545;
 }
 
-.menu-item.active>a .menu-icon {
+.menu-item.active > a .menu-icon {
   color: #404040 !important;
 }
 
 /* Parent menu item highlight when submenu is open */
-.menu-item.sub-menu.open>a {
+.menu-item.sub-menu.open > a {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
@@ -384,7 +374,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: #F2A634;
+  background-color: #dc3545;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -393,8 +383,8 @@
   transform: translateX(50%);
   z-index: 1111;
   cursor: pointer;
-  color: #FFFDFA;
-  box-shadow: 1px 1px 4px #FFFDFA;
+  color: #fffdfa;
+  box-shadow: 1px 1px 4px #fffdfa;
   text-decoration: none;
 }
 
@@ -420,7 +410,6 @@
 
 /* Explicitly show when sidebar is NOT collapsed */
 .main-layout:not(.sidebar-collapsed) .menu-title,
-
 .main-layout:not(.sidebar-collapsed) .submenu-arrow {
   opacity: 1;
   pointer-events: auto;
@@ -438,7 +427,7 @@
   position: relative;
   left: 0px;
   top: 5px;
-  color: #5C5C5C;
+  color: #5c5c5c;
   font-size: 20px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -448,5 +437,5 @@
 
 .sidebar-toggler:hover {
   background-color: #f7fafc;
-  color: #47B05A;
+  color: #dc3545;
 }

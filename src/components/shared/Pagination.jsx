@@ -1,6 +1,11 @@
-import React from 'react';
-import './pagination.css'; // Correct import
-const Pagination = ({ totalItems, itemsPerPage, currentPage, setCurrentPage }) => {
+import React from "react";
+import "./pagination.css"; // Correct import
+const Pagination = ({
+  totalItems,
+  itemsPerPage,
+  currentPage,
+  setCurrentPage,
+}) => {
   // Calculate total pages
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -11,10 +16,15 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, setCurrentPage }) =
     <nav>
       <ul className="pagination">
         {pageNumbers.map((number) => (
-          <li key={number} className={number === currentPage ? 'page-item active' : 'page-item'}>
-            <a 
-              href="#!" 
-              onClick={() => setCurrentPage(number)} 
+          <li
+            key={number}
+            className={
+              number === currentPage ? "page-item active" : "page-item"
+            }
+          >
+            <a
+              href="#!"
+              onClick={() => setCurrentPage(number)}
               className="page-link"
             >
               {number}
@@ -31,7 +41,6 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, setCurrentPage }) =
           </li> */}
         <li className="page-item">Total Records {totalItems}</li>
       </ul>
-      
     </nav>
   );
 };

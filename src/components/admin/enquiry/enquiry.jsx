@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../../layout/Index";
 import Pagination from "../../shared/Pagination";
 import { AddIcon, SearchIcon } from "../../../config/Icons";
+import "./enquiry.css";
 
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -150,13 +151,13 @@ function EnquiryList() {
               onChange={(e) => setSearchVal(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
-            <button className="btn btn-success" onClick={handleSearch}>
+            <button className="global-button" onClick={handleSearch}>
               <SearchIcon />
             </button>
           </div>
 
           <div className="col-md-4 d-flex justify-content-end gap-1">
-            <button className="btn btn-success" onClick={handleExportCSV}>
+            <button className="global-button" onClick={handleExportCSV}>
               {selectedRows.length
                 ? `Export CSV (${selectedRows.length})`
                 : "Export CSV"}
@@ -218,7 +219,7 @@ function EnquiryList() {
 
                         <td>
                           <Link
-                            className="btn btn-sm btn-outline-success"
+                            className="global-button"
                             to={`/enquiries/${b.id}`}
                             target="_blank"
                           >

@@ -162,18 +162,18 @@ function PartnerList() {
               onChange={(e) => setSearchVal(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
-            <button className="btn btn-success" onClick={handleSearch}>
+            <button className="global-button" onClick={handleSearch}>
               <SearchIcon />
             </button>
           </div>
           <div className="col-md-4 d-flex justify-content-end gap-1">
-            <button className="btn btn-success" onClick={handleExportCSV}>
+            <button className="global-button" onClick={handleExportCSV}>
               {selectedRows.length
                 ? `Export CSV (${selectedRows.length})`
                 : "Export CSV"}
             </button>
             {/* <button
-              className="btn btn-primary"
+              className="global-button"
               onClick={() => {
                 setSelectedPartner(null);
                 setShowModal(true);
@@ -241,7 +241,7 @@ function PartnerList() {
                         <td>{formatDate(p.createDate)}</td>
                         <td>
                           <Link
-                            className="btn btn-sm btn-outline-success"
+                            className="global-button"
                             to={`/partner-students/${p.id}`}
                             target="_blank"
                           >

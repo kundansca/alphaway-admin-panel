@@ -223,13 +223,13 @@ function Bookings() {
               onChange={(e) => setSearchVal(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
-            <button className="btn btn-success" onClick={handleSearch}>
+            <button className="global-button" onClick={handleSearch}>
               <SearchIcon />
             </button>
           </div>
 
           <div className="col-md-4 d-flex justify-content-end gap-1">
-            <button className="btn btn-success" onClick={handleExportCSV}>
+            <button className="global-button" onClick={handleExportCSV}>
               {selectedRows.length
                 ? `Export CSV (${selectedRows.length})`
                 : "Export CSV"}
@@ -295,7 +295,7 @@ function Bookings() {
                         <td>
                           <td>
                             <Link
-                              className="btn btn-sm btn-outline-success"
+                              className="global-button"
                               to={`/bookings/${b.id}`}
                               target="_blank"
                             >

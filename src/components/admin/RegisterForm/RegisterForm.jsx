@@ -246,7 +246,7 @@ const RegisterForm = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="btn btn-primary w-100 rounded-pill shadow-sm"
+                  className="global-button w-100 rounded-pill shadow-sm"
                   disabled={loading}
                 >
                   {loading ? (

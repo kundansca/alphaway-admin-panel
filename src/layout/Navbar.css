@@ -37,7 +37,7 @@
 }
 
 .sidebar-toggler:hover {
-  color: #47b05a;
+  color: #dc3545;
   background-color: rgba(71, 176, 90, 0.1);
 }
 
@@ -68,11 +68,11 @@
 
 .search-input:focus {
   background-color: #fffdfa;
-  border-color: #47b05a;
+  border-color: #dc3545;
 }
 
 .search-button {
-  background-color: #47b05a;
+  background-color: #dc3545;
   color: white;
   border: none;
   padding: 0 15px;
@@ -122,7 +122,7 @@
 
 .user-button:hover {
   background-color: rgba(71, 176, 90, 0.1);
-  color: #47b05a;
+  color: #dc3545;
 }
 
 .dropdown-menu {
@@ -200,7 +200,7 @@
 
 .dropdown-item:hover {
   background-color: #f4f5f9;
-  color: #47b05a;
+  color: #dc3545;
 }
 
 /* Responsive adjustments */

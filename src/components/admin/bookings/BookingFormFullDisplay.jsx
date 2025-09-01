@@ -92,10 +92,7 @@ const BookingFormFullDisplay = () => {
         <div ref={printRef}>
           <h2 className="mb-4">Booking Form Details</h2>
 
-          <button
-            className="btn btn-primary mb-3 no-print"
-            onClick={handlePrint}
-          >
+          <button className="global-button mb-3 no-print" onClick={handlePrint}>
             Print Form
           </button>
 

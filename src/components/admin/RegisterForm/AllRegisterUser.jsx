@@ -220,12 +220,12 @@ function AllRegisterUser() {
 
   return (
     <Layout>
-      <div className="container-fluid py-4">
-        <div className="row mb-3">
-          <div className="col-6">
+      <div className="container-fluid col-12 py-4">
+        <div className="row">
+          <div className="col-10">
             <h1>Users</h1>
           </div>
-          <div className="col-6 d-flex gap-2">
+          <div className="col-8 d-flex gap-2">
             <input
               className="form-control"
               placeholder="Search name, email"
@@ -233,10 +233,12 @@ function AllRegisterUser() {
               onChange={(e) => setSearchVal(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
-            <button className="btn btn-success" onClick={handleSearch}>
+            <button className="global-button" onClick={handleSearch}>
               <SearchIcon />
             </button>
-            <button className="btn btn-primary" onClick={handleExportCSV}>
+          </div>
+          <div className="col-md-4 d-flex justify-content-end gap-1">
+            <button className="global-button" onClick={handleExportCSV}>
               {selectedRows.length
                 ? `Export CSV (${selectedRows.length})`
                 : "Export CSV"}
@@ -254,7 +256,7 @@ function AllRegisterUser() {
           <div className="alert alert-danger text-center">{error}</div>
         ) : (
           <>
-            <div className="table-responsive">
+            <div className="table-responsive mt-4">
               <table className="table table-bordered table-hover align-middle">
                 <thead className="table-dark">
                   <tr>
@@ -291,7 +293,7 @@ function AllRegisterUser() {
                         <td>{renderStatus(user.enabled)}</td>
                         <td>
                           <button
-                            className="btn btn-sm btn-warning"
+                            className="global-button"
                             onClick={() => handleEditClick(user)}
                           >
                             Edit

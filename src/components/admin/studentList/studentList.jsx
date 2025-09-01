@@ -25,12 +25,13 @@ function StudentList() {
 
   const handleSearch = () => {
     const s = searchVal.toLowerCase();
-    const result = studentData.filter(b =>
-      b.firstName?.toLowerCase().includes(s) ||
-      b.lastName?.toLowerCase().includes(s) ||
-      b.email?.toLowerCase().includes(s) ||
-      b.phone?.toLowerCase().includes(s) ||
-      b.university?.toLowerCase().includes(s)
+    const result = studentData.filter(
+      (b) =>
+        b.firstName?.toLowerCase().includes(s) ||
+        b.lastName?.toLowerCase().includes(s) ||
+        b.email?.toLowerCase().includes(s) ||
+        b.phone?.toLowerCase().includes(s) ||
+        b.university?.toLowerCase().includes(s)
     );
     setFilteredData(result);
     setCurrentPage(1);
@@ -38,18 +39,34 @@ function StudentList() {
 
   const handleExportCSV = () => {
     const headers = [
-      "ID", "First Name", "Last Name", "Email", "Phone", "DOB",
-      "Gender", "University", "Year of Study", "Academic Year"
+      "ID",
+      "First Name",
+      "Last Name",
+      "Email",
+      "Phone",
+      "DOB",
+      "Gender",
+      "University",
+      "Year of Study",
+      "Academic Year",
     ];
     const data = selectedRows.length
-      ? studentData.filter(b => selectedRows.includes(b.id))
+      ? studentData.filter((b) => selectedRows.includes(b.id))
       : studentData;
-    const rows = data.map(b => [
-      b.id, b.firstName, b.lastName, b.email, b.phone,
-      b.dob, b.gender, b.university, b.yearOfStudy, b.academicYear
+    const rows = data.map((b) => [
+      b.id,
+      b.firstName,
+      b.lastName,
+      b.email,
+      b.phone,
+      b.dob,
+      b.gender,
+      b.university,
+      b.yearOfStudy,
+      b.academicYear,
     ]);
     const csv = [headers, ...rows]
-      .map(r => r.map(cell => `"${cell}"`).join(","))
+      .map((r) => r.map((cell) => `"${cell}"`).join(","))
       .join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const link = document.createElement("a");
@@ -63,14 +80,14 @@ function StudentList() {
   };
 
   const handleSelectAll = () => {
-    if (!selectAll) setSelectedRows(students.map(v => v.id));
+    if (!selectAll) setSelectedRows(students.map((v) => v.id));
     else setSelectedRows([]);
     setSelectAll(!selectAll);
   };
 
-  const handleRowSelect = id => {
-    setSelectedRows(prev =>
-      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+  const handleRowSelect = (id) => {
+    setSelectedRows((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   };
 
@@ -86,23 +103,26 @@ function StudentList() {
               className="form-control"
               placeholder="Search name, email, phone, university"
               value={searchVal}
-              onChange={e => setSearchVal(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && handleSearch()}
+              onChange={(e) => setSearchVal(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
-            <button className="btn btn-success" onClick={handleSearch}>
+            <button className="global-button" onClick={handleSearch}>
               <SearchIcon />
             </button>
           </div>
           <div className="col-md-4 d-flex justify-content-end gap-1">
-            <button className="btn btn-outline-secondary" onClick={handleExportCSV}>
+            <button className="global-button" onClick={handleExportCSV}>
               {selectedRows.length
                 ? `Export CSV (${selectedRows.length})`
                 : "Export CSV"}
             </button>
-            <button className="btn btn-primary" onClick={() => {
-              setSelectedStudent(null);
-              setShowModal(true);
-            }}>
+            <button
+              className="global-button"
+              onClick={() => {
+                setSelectedStudent(null);
+                setShowModal(true);
+              }}
+            >
               <AddIcon /> Add
             </button>
           </div>
@@ -112,7 +132,13 @@ function StudentList() {
           <table className="table table-bordered table-hover align-middle">
             <thead className="table-dark">
               <tr>
-                <th><input type="checkbox" checked={selectAll} onChange={handleSelectAll} /></th>
+                <th>
+                  <input
+                    type="checkbox"
+                    checked={selectAll}
+                    onChange={handleSelectAll}
+                  />
+                </th>
                 <th>#</th>
                 <th>Name</th>
                 <th>Email</th>
@@ -135,15 +161,22 @@ function StudentList() {
                       />
                     </td>
                     <td>{(currentPage - 1) * perPage + i + 1}</td>
-                    <td>{b.firstName} {b.lastName}</td>
+                    <td>
+                      {b.firstName} {b.lastName}
+                    </td>
                     <td>{b.email}</td>
                     <td>{b.phone}</td>
                     <td>{b.university}</td>
                     <td>{b.dob}</td>
                     <td>{b.gender}</td>
                     <td>
-                      <button className="btn btn-sm btn-outline-primary"
-                        onClick={() => { setSelectedStudent(b); setShowModal(true); }}>
+                      <button
+                        className="btn btn-sm btn-outline-primary"
+                        onClick={() => {
+                          setSelectedStudent(b);
+                          setShowModal(true);
+                        }}
+                      >
                         View
                       </button>
                     </td>
@@ -151,7 +184,9 @@ function StudentList() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="9" className="text-center">No data</td>
+                  <td colSpan="9" className="text-center">
+                    No data
+                  </td>
                 </tr>
               )}
             </tbody>

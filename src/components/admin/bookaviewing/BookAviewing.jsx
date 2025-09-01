@@ -154,7 +154,7 @@ function BookAViewing() {
           <div className="col-4">
             <button
               type="button"
-              className="btn btn-success"
+              className="global-button"
               onClick={() => setCurrentPage(1)}
               disabled={!!error}
             >
@@ -163,7 +163,7 @@ function BookAViewing() {
           </div>
           <div className="col-2 d-flex justify-content-end gap-1 mt-3 mt-md-0">
             <button
-              className="btn btn-success"
+              className="global-button"
               onClick={handleExportCSV}
               disabled={!!error}
             >
@@ -269,7 +269,7 @@ function BookAViewing() {
                           <td>{createdDateAndTime}</td>
                           <td>
                             <Link
-                              className="btn btn-sm btn-outline-success"
+                              className="global-button"
                               to={`/viewing-booking/${viewer.id}`}
                               target="_blank"
                             >

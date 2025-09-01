@@ -67,3 +67,33 @@ a {
   margin-left: 85px;
   /* Margin for collapsed sidebar */
 }
+.global-button {
+  align-items: center;
+  background-color: #dc3545;
+  border: 0;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #ffffff;
+  display: flex;
+  font-size: 12px;
+  justify-content: center;
+  line-height: 1em;
+  width: auto;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.global-button {
+  padding: 14px 20px;
+  border-radius: 6px;
+  transition: 300ms;
+}
+
+.global-button:active {
+  transform: scale(0.9);
+}
