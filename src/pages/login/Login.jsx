@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import { apiRequestPostWithoutToken } from '../utils/ApiService';
 import "./Login.css";
 import logo from "../../assets/img/logo/alphaway_logo.png";
-// import circlelogo from '../../assets/img/logo/circleLogo.png';
 import circlelogo from "../../assets/img/logo/circleLogo.png";
 import { useDispatch } from "react-redux";
 import { loginAdmin } from "../../features/auth/authThunks";
@@ -55,7 +53,6 @@ const Login = () => {
     try {
       setLoading(true);
       await dispatch(loginAdmin({ email: username, password })).unwrap();
-
       navigate("/admin/enquiry");
     } catch (err) {
       setError(err);
@@ -77,21 +74,33 @@ const Login = () => {
                 <div className="login-logo-mobile">
                   <img src={circlelogo} alt="Logo" draggable="false" />
                 </div>
-                <h5 className="login-title">Admin Login</h5>
+                <h5 className="login-title" style={{ color: "#000000" }}>
+                  Admin Login
+                </h5>
                 <div className="login-form-input">
                   <form
                     className="login-form-container"
                     onSubmit={handleSubmit}
                   >
                     {error && (
-                      <div className="error-message text-danger">{error}</div>
+                      <div
+                        className="error-message"
+                        style={{ color: "#DC3545" }}
+                      >
+                        {error}
+                      </div>
                     )}
 
                     <div className="form-row">
                       <div className="input-group">
                         <div className="input-group__label-wrapper">
-                          <i className="ri-user-line icon"></i>
-                          <label className="label">Username</label>
+                          <i
+                            className="ri-user-line icon"
+                            style={{ color: "#000" }}
+                          ></i>
+                          <label className="label" style={{ color: "#000" }}>
+                            Username
+                          </label>
                         </div>
                         <div className="input-field">
                           <input
@@ -103,7 +112,10 @@ const Login = () => {
                             onChange={handleChange}
                           />
                           {fieldErrors.username && (
-                            <div className="field-error text-danger">
+                            <div
+                              className="field-error"
+                              style={{ color: "#DC3545" }}
+                            >
                               {fieldErrors.username}
                             </div>
                           )}
@@ -114,8 +126,13 @@ const Login = () => {
                     <div className="form-row">
                       <div className="input-group input-field-bottom-space">
                         <div className="input-group__label-wrapper">
-                          <i className="ri-lock-line icon"></i>
-                          <label className="label">Password</label>
+                          <i
+                            className="ri-lock-line icon"
+                            style={{ color: "#000" }}
+                          ></i>
+                          <label className="label" style={{ color: "#000" }}>
+                            Password
+                          </label>
                         </div>
                         <div
                           className="input-field"
@@ -128,7 +145,7 @@ const Login = () => {
                             placeholder="Enter Password"
                             value={formData.password}
                             onChange={handleChange}
-                            style={{ paddingRight: "40px" }}
+                            style={{ paddingRight: "40px", color: "#000" }}
                           />
 
                           {formData.password !== "" && (
@@ -139,8 +156,9 @@ const Login = () => {
                                 zIndex: 1,
                                 right: "10px",
                                 cursor: "pointer",
-                                top: "50%",
+                                top: fieldErrors.password ? "29%" : "50%",
                                 transform: "translateY(-50%)",
+                                color: "#DC3545",
                               }}
                             >
                               {showPassword ? (
@@ -152,7 +170,10 @@ const Login = () => {
                           )}
 
                           {fieldErrors.password && (
-                            <div className="field-error text-danger">
+                            <div
+                              className="field-error"
+                              style={{ color: "#DC3545" }}
+                            >
                               {fieldErrors.password}
                             </div>
                           )}
@@ -165,15 +186,16 @@ const Login = () => {
                         type="submit"
                         className="button button--medium button--main login-button"
                         disabled={loading}
+                        style={{
+                          backgroundColor: "#DC3545",
+                          color: "#ffffff",
+                          border: "none",
+                        }}
                       >
                         {loading ? "Logging in..." : "Login"}
                       </button>
                     </div>
                   </form>
-
-                  <div className="login-footer">
-                    <p className="version">Alphaway Admin Panel Vs 1.0.1</p>
-                  </div>
                 </div>
               </div>
             </div>
